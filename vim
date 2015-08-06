@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-docker run -it --rm --name vim -v "$PWD":/data jllacuna/vim $@
+docker run -it --rm -v "$PWD":/data jllacuna/vim $@
