@@ -81,6 +81,7 @@ RUN mkdir -p ~/.fonts ~/.config/fontconfig/conf.d && \
   fc-cache -vf ~/.fonts
 
 RUN git clone https://github.com/bling/vim-airline.git ~/.vim/bundle/vim-airline
+RUN git clone https://github.com/vim-airline/vim-airline-themes.git ~/.vim/bundle/vim-airline-themes
 
 # vim-bundler
 RUN git clone https://github.com/tpope/vim-bundler.git ~/.vim/bundle/vim-bundler
