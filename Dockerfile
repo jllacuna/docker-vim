@@ -7,14 +7,14 @@ ENV REFRESHED_AT 2015-07-30
 # Install vim from source
 RUN sudo apt-get -yqq update
 RUN sudo apt-get -yqq build-dep vim
-RUN sudo apt-get -yqq install mercurial git curl
+RUN sudo apt-get -yqq install git curl
 
 ENV INSTALLS /root/installs
 
 RUN mkdir -p $INSTALLS
 
-RUN hg clone https://vim.googlecode.com/hg/ $INSTALLS/vim
-RUN cd $INSTALLS/vim && \
+RUN git clone https://github.com/vim/vim.git $INSTALLS/vim
+RUN cd $INSTALLS/vim && git pull && \
     ./configure --with-features=huge --enable-pythoninterp --enable-rubyinterp --enable-perlinterp && \
     make && \
     make install

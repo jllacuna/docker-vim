@@ -118,3 +118,4 @@ map <Leader>t :call RunCurrentSpecFile()<CR>
 runtime macros/matchit.vim
 
 au BufRead,BufNewFile *.rb.sample setfiletype ruby
+au BufRead,BufNewFile *.check setfiletype xml
