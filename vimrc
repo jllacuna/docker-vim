@@ -33,6 +33,7 @@ set shiftround
 set undolevels=1000
 set pastetoggle=<F2>
 set number
+set encoding=utf8
 
 let mapleader = ","
 
@@ -112,6 +113,9 @@ nmap gs :Gstatus<CR>
 " vim-rspec
 map <leader>s :call RunNearestSpec()<CR>
 map <Leader>t :call RunCurrentSpecFile()<CR>
+
+" vim-devicons
+let g:webdevicons_enable = 1
 
 :filetype plugin on
 

@@ -45,7 +45,7 @@ RUN sudo apt-get -yqq install silversearcher-ag
 RUN git clone https://github.com/rking/ag.vim.git ~/.vim/bundle/ag.vim
 
 # ctrlp.vim
-RUN git clone https://github.com/kien/ctrlp.vim.git ~/.vim/bundle/ctrlp.vim
+RUN git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp.vim
 
 # html5.vim
 RUN git clone https://github.com/othree/html5.vim.git ~/.vim/bundle/html5.vim
@@ -152,6 +152,10 @@ RUN sudo apt-get -yqq install build-essential cmake python-dev
 RUN git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe
 RUN cd ~/.vim/bundle/YouCompleteMe && git submodule update --init --recursive
 RUN cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer --gocode-completer
+
+# https://github.com/ryanoasis/vim-devicons#quick-installation
+# NOTE: Need to install a patched Nerd Font: https://github.com/ryanoasis/nerd-fonts#usage
+RUN git clone https://github.com/ryanoasis/vim-devicons ~/.vim/bundle/vim-devicons
 
 # Add our vimrc
 ADD vimrc /root/.vimrc
