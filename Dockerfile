@@ -5,9 +5,9 @@ MAINTAINER Jay Llacuna
 ENV REFRESHED_AT 2015-07-30
 
 # Install vim from source
-RUN sudo apt-get -yqq update
-RUN sudo apt-get -yqq build-dep vim
-RUN sudo apt-get -yqq install git curl
+RUN apt-get -yqq update
+RUN apt-get -yqq build-dep vim
+RUN apt-get -yqq install git curl
 
 ENV INSTALLS /root/installs
 
@@ -41,7 +41,7 @@ RUN git clone https://github.com/lukaszkorecki/CoffeeTags.git ~/.vim/bundle/Coff
 RUN git clone https://github.com/ekalinin/Dockerfile.vim.git ~/.vim/bundle/Dockerfile
 
 # ag.vim
-RUN sudo apt-get -yqq install silversearcher-ag
+RUN apt-get -yqq install silversearcher-ag
 RUN git clone https://github.com/rking/ag.vim.git ~/.vim/bundle/ag.vim
 
 # ctrlp.vim
@@ -57,7 +57,7 @@ RUN git clone https://github.com/vim-scripts/simple-pairs.git ~/.vim/bundle/simp
 RUN git clone https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
 
 # tagbar
-RUN sudo apt-get -yqq install exuberant-ctags
+RUN apt-get -yqq install exuberant-ctags
 RUN git clone https://github.com/majutsushi/tagbar.git ~/.vim/bundle/tagbar
 
 # tcomment_vim
@@ -70,7 +70,7 @@ RUN git clone https://github.com/smallspark/thor.vim.git ~/.vim/bundle/thor.vim
 RUN git clone https://github.com/SirVer/ultisnips.git ~/.vim/bundle/ultisnips
 
 # vim-airline
-RUN sudo apt-get -yqq install fontconfig
+RUN apt-get -yqq install fontconfig
 RUN locale-gen en_US.UTF-8 && \
     /usr/sbin/update-locale LANG=en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
@@ -143,15 +143,26 @@ RUN git clone https://github.com/nelstrom/vim-textobj-rubyblock.git ~/.vim/bundl
 # vim-textobj-user
 RUN git clone https://github.com/kana/vim-textobj-user.git ~/.vim/bundle/vim-textobj-user
 
+# vim-bind (i.e. DNS zone files)
+RUN git clone https://github.com/Absolight/vim-bind.git ~/.vim/bundle/vim-bind
+
+# Install node
+RUN apt-get -yqq install nodejs npm
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+
 # YouCompleteMe
 # NOTE: Building this may result in virtual memory limitations
 # Add swap space to docker-machine to compile
 # SSH to the docker machine: docker-machine ssh
 # Add swap to docker machine: http://stackoverflow.com/a/31141359
-RUN sudo apt-get -yqq install build-essential cmake python-dev
+RUN apt-get -yqq install software-properties-common python-software-properties
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test
+RUN apt-get update
+RUN apt-get -yqq install build-essential gcc-5 g++-5 cmake python-dev python3-dev
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
 RUN git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe
 RUN cd ~/.vim/bundle/YouCompleteMe && git submodule update --init --recursive
-RUN cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer --gocode-completer
+RUN cd ~/.vim/bundle/YouCompleteMe && ./install.py --clang-completer --gocode-completer --tern-completer
 
 # https://github.com/ryanoasis/vim-devicons#quick-installation
 # NOTE: Need to install a patched Nerd Font: https://github.com/ryanoasis/nerd-fonts#usage
