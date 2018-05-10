@@ -133,6 +133,9 @@ RUN git clone https://github.com/digitaltoad/vim-jade.git ~/.vim/bundle/vim-jade
 # vim-javascript
 RUN git clone https://github.com/pangloss/vim-javascript.git ~/.vim/bundle/vim-javascript
 
+# vim-jsx
+RUN git clone https://github.com/mxw/vim-jsx.git ~/.vim/bundle/vim-jsx
+
 # vim-jst
 RUN git clone https://github.com/briancollins/vim-jst.git ~/.vim/bundle/vim-jst
 
