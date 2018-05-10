@@ -1,13 +1,29 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 MAINTAINER Jay Llacuna
 
-ENV REFRESHED_AT 2015-07-30
+ENV REFRESHED_AT 2018-05-09
 
 # Install vim from source
 RUN apt-get -yqq update
-RUN apt-get -yqq build-dep vim
-RUN apt-get -yqq install git curl
+RUN apt-get -yqq install libncurses5-dev \
+                         libgnome2-dev \
+                         libgnomeui-dev \
+                         libgtk2.0-dev \
+                         libatk1.0-dev \
+                         libbonoboui2-dev \
+                         libcairo2-dev \
+                         libx11-dev \
+                         libxpm-dev \
+                         libxt-dev \
+                         python-dev \
+                         python3-dev \
+                         ruby-dev \
+                         lua5.1 \
+                         liblua5.1-dev \
+                         libperl-dev \
+                         git \
+                         curl
 
 ENV INSTALLS /root/installs
 
@@ -15,12 +31,18 @@ RUN mkdir -p $INSTALLS
 
 RUN git clone https://github.com/vim/vim.git $INSTALLS/vim
 RUN cd $INSTALLS/vim && git pull && \
-    ./configure --with-features=huge --enable-pythoninterp --enable-rubyinterp --enable-perlinterp && \
+    ./configure --with-features=huge \
+                --enable-multibyte \
+                --enable-rubyinterp=yes \
+                --enable-pythoninterp=yes \
+                --enable-python3interp=yes \
+                --enable-perlinterp=yes \
+                --enable-luainterp=yes \
+                --enable-gui=gtk2 \
+                --enable-cscope \
+                --prefix=/usr/local && \
     make && \
     make install
-
-# Change vi symlink to vim
-RUN rm /usr/bin/vi && ln -s /usr/local/bin/vim /usr/bin/vi
 
 # Install pathogen
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/colors
@@ -70,7 +92,7 @@ RUN git clone https://github.com/smallspark/thor.vim.git ~/.vim/bundle/thor.vim
 RUN git clone https://github.com/SirVer/ultisnips.git ~/.vim/bundle/ultisnips
 
 # vim-airline
-RUN apt-get -yqq install fontconfig
+RUN apt-get -yqq install locales fontconfig
 RUN locale-gen en_US.UTF-8 && \
     /usr/sbin/update-locale LANG=en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
@@ -93,9 +115,10 @@ RUN git clone https://github.com/kchmck/vim-coffee-script.git ~/.vim/bundle/vim-
 RUN git clone https://github.com/tpope/vim-fugitive.git ~/.vim/bundle/vim-fugitive
 
 # Install go
+ENV GO_VERSION=1.10.2
 RUN mkdir -p $INSTALLS/golang
-RUN curl -LSso $INSTALLS/golang/go1.4.2.linux-amd64.tar.gz https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf $INSTALLS/golang/go1.4.2.linux-amd64.tar.gz
+RUN curl -LSso $INSTALLS/golang/go$GO_VERSION.linux-amd64.tar.gz https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf $INSTALLS/golang/go$GO_VERSION.linux-amd64.tar.gz
 ENV PATH $PATH:/usr/local/go/bin
 
 # vim-go
@@ -155,14 +178,10 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 # Add swap space to docker-machine to compile
 # SSH to the docker machine: docker-machine ssh
 # Add swap to docker machine: http://stackoverflow.com/a/31141359
-RUN apt-get -yqq install software-properties-common python-software-properties
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test
-RUN apt-get update
-RUN apt-get -yqq install build-essential gcc-5 g++-5 cmake python-dev python3-dev
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+RUN apt-get -yqq install build-essential cmake
 RUN git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe
 RUN cd ~/.vim/bundle/YouCompleteMe && git submodule update --init --recursive
-RUN cd ~/.vim/bundle/YouCompleteMe && ./install.py --clang-completer --gocode-completer --tern-completer
+RUN cd ~/.vim/bundle/YouCompleteMe && ./install.py --clang-completer --go-completer --js-completer
 
 # https://github.com/ryanoasis/vim-devicons#quick-installation
 # NOTE: Need to install a patched Nerd Font: https://github.com/ryanoasis/nerd-fonts#usage
