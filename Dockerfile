@@ -172,9 +172,9 @@ RUN git clone https://github.com/kana/vim-textobj-user.git ~/.vim/bundle/vim-tex
 # vim-bind (i.e. DNS zone files)
 RUN git clone https://github.com/Absolight/vim-bind.git ~/.vim/bundle/vim-bind
 
-# Install node
-RUN apt-get -yqq install nodejs npm
-RUN ln -s /usr/bin/nodejs /usr/bin/node
+# Install node 10
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get -yqq install nodejs
 
 # YouCompleteMe
 # NOTE: Building this may result in virtual memory limitations
