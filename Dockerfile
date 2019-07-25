@@ -72,8 +72,15 @@ RUN git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp.vim
 # html5.vim
 RUN git clone https://github.com/othree/html5.vim.git ~/.vim/bundle/html5.vim
 
-# simple-pairs
-RUN git clone https://github.com/vim-scripts/simple-pairs.git ~/.vim/bundle/simple-pairs
+# auto-pairs
+RUN git clone https://github.com/jiangmiao/auto-pairs.git ~/.vim/bundle/auto-pairs
+# TODO: Try vim-closer if this becomes annoying: https://github.com/rstacruz/vim-closer
+
+# vim-endwise
+RUN git clone https://github.com/tpope/vim-endwise.git ~/.vim/bundle/vim-endwise
+
+# vim-closetag
+RUN git clone https://github.com/alvan/vim-closetag.git ~/.vim/bundle/vim-closetag
 
 # tabular
 RUN git clone https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
@@ -115,11 +122,14 @@ RUN git clone https://github.com/kchmck/vim-coffee-script.git ~/.vim/bundle/vim-
 RUN git clone https://github.com/tpope/vim-fugitive.git ~/.vim/bundle/vim-fugitive
 
 # Install go
-ENV GO_VERSION=1.10.2
+ENV GO_VERSION=1.12.7
 RUN mkdir -p $INSTALLS/golang
 RUN curl -LSso $INSTALLS/golang/go$GO_VERSION.linux-amd64.tar.gz https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf $INSTALLS/golang/go$GO_VERSION.linux-amd64.tar.gz
 ENV PATH $PATH:/usr/local/go/bin
+
+# syntastic
+RUN git clone --depth=1 https://github.com/vim-syntastic/syntastic.git ~/.vim/bundle/syntastic
 
 # vim-go
 RUN git clone https://github.com/fatih/vim-go.git ~/.vim/bundle/vim-go
@@ -153,6 +163,9 @@ RUN git clone https://github.com/thoughtbot/vim-rspec.git ~/.vim/bundle/vim-rspe
 
 # vim-ruby
 RUN git clone https://github.com/vim-ruby/vim-ruby.git ~/.vim/bundle/vim-ruby
+
+# swift.vim
+RUN git clone https://github.com/keith/swift.vim.git ~/.vim/bundle/swift.vim
 
 # vim-snippets
 RUN git clone https://github.com/honza/vim-snippets.git ~/.vim/bundle/vim-snippets
