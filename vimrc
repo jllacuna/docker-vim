@@ -146,6 +146,10 @@ map <Leader>t :call RunCurrentSpecFile()<CR>
 " vim-devicons
 let g:webdevicons_enable = 1
 
+" vim-taskpaper
+let g:task_paper_date_format = "%Y-%m-%dT%H:%M:%S%z"
+let g:task_paper_follow_move = 0
+
 :filetype plugin on
 
 runtime macros/matchit.vim

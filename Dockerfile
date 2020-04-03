@@ -185,6 +185,12 @@ RUN git clone https://github.com/kana/vim-textobj-user.git ~/.vim/bundle/vim-tex
 # vim-bind (i.e. DNS zone files)
 RUN git clone https://github.com/Absolight/vim-bind.git ~/.vim/bundle/vim-bind
 
+# vim-taskpaper
+RUN git clone https://github.com/cweagans/vim-taskpaper.git ~/.vim/bundle/vim-taskpaper
+
+# vim-ember-hbs
+RUN git clone https://github.com/joukevandermaas/vim-ember-hbs.git ~/.vim/bundle/vim-ember-hbs
+
 # Install node 10
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get -yqq install nodejs
