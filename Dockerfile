@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 MAINTAINER Jay Llacuna
 
@@ -130,6 +130,7 @@ ENV PATH $PATH:/usr/local/go/bin
 
 # syntastic
 RUN git clone --depth=1 https://github.com/vim-syntastic/syntastic.git ~/.vim/bundle/syntastic
+# TODO: Consider ale: https://github.com/dense-analysis/ale
 
 # vim-go
 RUN git clone https://github.com/fatih/vim-go.git ~/.vim/bundle/vim-go
@@ -191,9 +192,13 @@ RUN git clone https://github.com/cweagans/vim-taskpaper.git ~/.vim/bundle/vim-ta
 # vim-ember-hbs
 RUN git clone https://github.com/joukevandermaas/vim-ember-hbs.git ~/.vim/bundle/vim-ember-hbs
 
-# Install node 10
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+# Install node 13
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
 RUN apt-get -yqq install nodejs
+
+# vim-prettier
+RUN npm install --save-dev --save-exact prettier
+RUN git clone https://github.com/prettier/vim-prettier.git ~/.vim/bundle/vim-prettier
 
 # YouCompleteMe
 # NOTE: Building this may result in virtual memory limitations
