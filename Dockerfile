@@ -177,6 +177,9 @@ RUN git clone https://github.com/tristen/vim-sparkup.git ~/.vim/bundle/vim-spark
 # vim-surround
 RUN git clone https://github.com/tpope/vim-surround.git ~/.vim/bundle/vim-surround
 
+# vim-svelte
+RUN git clone https://github.com/evanleck/vim-svelte.git ~/.vim/bundle/vim-svelte
+
 # vim-textobj-rubyblock
 RUN git clone https://github.com/nelstrom/vim-textobj-rubyblock.git ~/.vim/bundle/vim-textobj-rubyblock
 
