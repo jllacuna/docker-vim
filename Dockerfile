@@ -1,21 +1,21 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 MAINTAINER Jay Llacuna
 
-ENV REFRESHED_AT 2018-05-09
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install vim from source
 RUN apt-get -yqq update
-RUN apt-get -yqq install libncurses5-dev \
-                         libgnome2-dev \
-                         libgnomeui-dev \
+RUN apt-get -yqq install default-jdk \
+                         golang \
+                         libncurses5-dev \
                          libgtk2.0-dev \
                          libatk1.0-dev \
-                         libbonoboui2-dev \
                          libcairo2-dev \
                          libx11-dev \
                          libxpm-dev \
                          libxt-dev \
+                         mono-complete \
                          python-dev \
                          python3-dev \
                          ruby-dev \
@@ -25,24 +25,7 @@ RUN apt-get -yqq install libncurses5-dev \
                          git \
                          curl
 
-ENV INSTALLS /root/installs
-
-RUN mkdir -p $INSTALLS
-
-RUN git clone https://github.com/vim/vim.git $INSTALLS/vim
-RUN cd $INSTALLS/vim && git pull && \
-    ./configure --with-features=huge \
-                --enable-multibyte \
-                --enable-rubyinterp=yes \
-                --enable-pythoninterp=yes \
-                --enable-python3interp=yes \
-                --enable-perlinterp=yes \
-                --enable-luainterp=yes \
-                --enable-gui=gtk2 \
-                --enable-cscope \
-                --prefix=/usr/local && \
-    make && \
-    make install
+RUN apt-get -yqq install vim-nox
 
 # Install pathogen
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/colors
@@ -121,13 +104,6 @@ RUN git clone https://github.com/kchmck/vim-coffee-script.git ~/.vim/bundle/vim-
 # vim-fugitive
 RUN git clone https://github.com/tpope/vim-fugitive.git ~/.vim/bundle/vim-fugitive
 
-# Install go
-ENV GO_VERSION=1.12.7
-RUN mkdir -p $INSTALLS/golang
-RUN curl -LSso $INSTALLS/golang/go$GO_VERSION.linux-amd64.tar.gz https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf $INSTALLS/golang/go$GO_VERSION.linux-amd64.tar.gz
-ENV PATH $PATH:/usr/local/go/bin
-
 # syntastic
 RUN git clone --depth=1 https://github.com/vim-syntastic/syntastic.git ~/.vim/bundle/syntastic
 # TODO: Consider ale: https://github.com/dense-analysis/ale
@@ -195,9 +171,8 @@ RUN git clone https://github.com/cweagans/vim-taskpaper.git ~/.vim/bundle/vim-ta
 # vim-ember-hbs
 RUN git clone https://github.com/joukevandermaas/vim-ember-hbs.git ~/.vim/bundle/vim-ember-hbs
 
-# Install node 13
-RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
-RUN apt-get -yqq install nodejs
+# Install node
+RUN apt-get -yqq install nodejs npm
 
 # vim-prettier
 RUN npm install --save-dev --save-exact prettier
@@ -209,9 +184,9 @@ RUN git clone https://github.com/prettier/vim-prettier.git ~/.vim/bundle/vim-pre
 # SSH to the docker machine: docker-machine ssh
 # Add swap to docker machine: http://stackoverflow.com/a/31141359
 RUN apt-get -yqq install build-essential cmake
-RUN git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe
+RUN git clone https://github.com/ycm-core/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe
 RUN cd ~/.vim/bundle/YouCompleteMe && git submodule update --init --recursive
-RUN cd ~/.vim/bundle/YouCompleteMe && ./install.py --clang-completer --go-completer --js-completer
+RUN cd ~/.vim/bundle/YouCompleteMe && python3 install.py --all
 
 # https://github.com/ryanoasis/vim-devicons#quick-installation
 # NOTE: Need to install a patched Nerd Font: https://github.com/ryanoasis/nerd-fonts#usage
