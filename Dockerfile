@@ -186,7 +186,7 @@ RUN git clone https://github.com/prettier/vim-prettier.git ~/.vim/bundle/vim-pre
 RUN apt-get -yqq install build-essential cmake
 RUN git clone https://github.com/ycm-core/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe
 RUN cd ~/.vim/bundle/YouCompleteMe && git submodule update --init --recursive
-RUN cd ~/.vim/bundle/YouCompleteMe && python3 install.py --all
+RUN cd ~/.vim/bundle/YouCompleteMe && python3 install.py --all --force-sudo
 
 # https://github.com/ryanoasis/vim-devicons#quick-installation
 # NOTE: Need to install a patched Nerd Font: https://github.com/ryanoasis/nerd-fonts#usage
