@@ -21,9 +21,9 @@ configs.setup {
   sync_install = true, -- install languages synchronously (only applied to `ensure_installed`)
   -- WARNING: Leave sync_install to true so that Docker will compile the parsers into the image on build
   -- ignore_install = {}, -- List of parsers to ignore installing
-  --  autopairs = {
-  --    enable = true,
-  --  },
+  autopairs = {
+    enable = true,
+  },
   highlight = {
     enable = true, -- false will disable the whole extension
     -- disable = {}, -- list of language that will be disabled

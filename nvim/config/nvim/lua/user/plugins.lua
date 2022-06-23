@@ -47,7 +47,10 @@ return packer.startup(function(use)
   use "nvim-lua/plenary.nvim"  -- Useful lua functions used by lots of plugins
   use "RRethy/vim-illuminate"  -- highlight other instances of the word under cursor
   use "b0o/schemastore.nvim"   -- JSON schemas from schemastore.org
-  -- use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter
+  use {
+    "windwp/nvim-autopairs",   -- Autopairs, integrates with both cmp and treesitter
+    config = function () require("user.autopairs") end,
+  }
   -- use "numToStr/Comment.nvim" -- Easily comment stuff
   -- use "kyazdani42/nvim-tree.lua"
   -- use "akinsho/bufferline.nvim"
