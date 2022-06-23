@@ -10,12 +10,18 @@ RUN apk add --no-cache \
   nodejs \
   npm
 
+# Install telescope dependencies
+RUN apk add --no-cache \
+  ripgrep \
+  fd \
+  git
+
 # Folder for lsp servers
 ENV LSP_SERVERS=/usr/local/lib/lsp_servers
 RUN mkdir -p $LSP_SERVERS
 
 # Install lua-language-server
-RUN apk add --no-cache --virtual .deps build-base git bash ninja \
+RUN apk add --no-cache --virtual .deps build-base bash ninja \
   && cd $LSP_SERVERS \
   && git clone --depth=1 https://github.com/sumneko/lua-language-server \
   && cd lua-language-server \
@@ -38,7 +44,7 @@ RUN npm install -g vscode-langservers-extracted \
 COPY config /root/.config
 
 # Install plugins with packer.nvim
-RUN apk add --no-cache --virtual .deps git \
+RUN apk add --no-cache --virtual .deps build-base \
   && nvim --headless -c 'autocmd User PackerComplete quitall' \
   && apk del .deps
 

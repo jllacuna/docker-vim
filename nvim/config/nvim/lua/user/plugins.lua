@@ -62,15 +62,16 @@ return packer.startup(function(use)
   -- use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
   -- use "folke/which-key.nvim"
 
-  -- -- Colorschemes
+  -- Colorschemes
   use {
     "metalelf0/jellybeans-nvim",
     requires = {{"rktjmp/lush.nvim"}}
   }
+  use "kyazdani42/nvim-web-devicons"
   -- use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
   -- use "lunarvim/darkplus.nvim"
 
-  -- -- cmp plugins
+  -- cmp plugins
   use "hrsh7th/nvim-cmp" -- The completion plugin
   use "hrsh7th/cmp-buffer" -- buffer completions
   use "hrsh7th/cmp-path" -- path completions
@@ -79,20 +80,25 @@ return packer.startup(function(use)
   use "saadparwaiz1/cmp_luasnip" -- snippet completions
   use "hrsh7th/cmp-nvim-lsp"
 
-  -- -- snippets
+  -- snippets
   use "L3MON4D3/LuaSnip" --snippet engine
   use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
-  --
-  -- -- LSP
+
+  -- LSP
   use "neovim/nvim-lspconfig" -- enable LSP
   use "williamboman/nvim-lsp-installer" -- simple to use language server installer
   use "jose-elias-alvarez/typescript.nvim" -- tsserver lsp intgration
   -- use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
   -- use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
-  --
-  -- -- Telescope
-  -- use "nvim-telescope/telescope.nvim"
-  --
+
+  -- Telescope
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    run = 'make',
+  }
+  use "nvim-telescope/telescope.nvim"
+  use "nvim-telescope/telescope-node-modules.nvim"
+  use "sudormrfbin/cheatsheet.nvim"
   -- -- Treesitter
   -- use {
   --   "nvim-treesitter/nvim-treesitter",

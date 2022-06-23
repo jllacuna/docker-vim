@@ -82,6 +82,18 @@ keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
 -- keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
 -- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
+-- Telescope --
+keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
+keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
+keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
+keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
+keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
+keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
+keymap("n", "gi", "<cmd>Telescope lsp_implementations<cr>", opts)
+
+-- Cheatsheet --
+keymap("n", "<leader>cs", "<cmd>Cheatsheet<cr>", opts)
+
 -- Toggle line numbers
 keymap("n", "<leader>l", ":set nonumber!<CR>", opts)
 
