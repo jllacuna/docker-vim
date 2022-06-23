@@ -49,7 +49,6 @@ return packer.startup(function(use)
   use "b0o/schemastore.nvim"   -- JSON schemas from schemastore.org
   -- use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter
   -- use "numToStr/Comment.nvim" -- Easily comment stuff
-  -- use "kyazdani42/nvim-web-devicons"
   -- use "kyazdani42/nvim-tree.lua"
   -- use "akinsho/bufferline.nvim"
   -- use "moll/vim-bbye"
@@ -67,12 +66,18 @@ return packer.startup(function(use)
     "metalelf0/jellybeans-nvim",
     requires = {{"rktjmp/lush.nvim"}}
   }
-  use "kyazdani42/nvim-web-devicons"
+  use {
+    "kyazdani42/nvim-web-devicons",
+    config = function () require("user.devicons") end,
+  }
   -- use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
   -- use "lunarvim/darkplus.nvim"
 
   -- cmp plugins
-  use "hrsh7th/nvim-cmp" -- The completion plugin
+  use {
+    "hrsh7th/nvim-cmp", -- The completion plugin
+    config = function () require("user.cmp") end,
+  }
   use "hrsh7th/cmp-buffer" -- buffer completions
   use "hrsh7th/cmp-path" -- path completions
   use "hrsh7th/cmp-cmdline" -- cmdline completions
@@ -85,8 +90,12 @@ return packer.startup(function(use)
   use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
   -- LSP
-  use "neovim/nvim-lspconfig" -- enable LSP
-  use "williamboman/nvim-lsp-installer" -- simple to use language server installer
+   -- simple to use language server installer
+  use {
+    "williamboman/nvim-lsp-installer",
+    requires = {{"neovim/nvim-lspconfig" }},
+    config = function () require("user.lsp") end,
+  }
   use "jose-elias-alvarez/typescript.nvim" -- tsserver lsp intgration
   -- use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
   -- use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
@@ -96,14 +105,21 @@ return packer.startup(function(use)
     'nvim-telescope/telescope-fzf-native.nvim',
     run = 'make',
   }
-  use "nvim-telescope/telescope.nvim"
+  use {
+    "nvim-telescope/telescope.nvim",
+    config = function () require("user.telescope") end,
+  }
   use "nvim-telescope/telescope-node-modules.nvim"
-  use "sudormrfbin/cheatsheet.nvim"
-  -- -- Treesitter
-  -- use {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   run = ":TSUpdate",
-  -- }
+  use {
+    "sudormrfbin/cheatsheet.nvim",
+    config = function () require("user.cheatsheet") end,
+  }
+
+  -- Treesitter
+  use {
+    "nvim-treesitter/nvim-treesitter",
+    config = function () require("user.treesitter") end,
+  }
   -- use "JoosepAlviste/nvim-ts-context-commentstring"
   --
   -- -- Git

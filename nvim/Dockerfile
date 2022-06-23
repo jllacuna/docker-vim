@@ -16,6 +16,19 @@ RUN apk add --no-cache \
   fd \
   git
 
+# Install glibc for tree-sitter-cli
+ARG GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc
+ARG GLIBC_VERSION=2.30-r0
+
+RUN set -ex && \
+  apk add --no-cache --virtual .deps libstdc++ curl ca-certificates && \
+  for pkg in glibc-${GLIBC_VERSION} glibc-bin-${GLIBC_VERSION}; \
+      do curl -sSL ${GLIBC_REPO}/releases/download/${GLIBC_VERSION}/${pkg}.apk -o /tmp/${pkg}.apk; done && \
+  apk add --allow-untrusted /tmp/*.apk && \
+  rm -v /tmp/*.apk && \
+  /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib \
+  && apk del .deps
+
 # Folder for lsp servers
 ENV LSP_SERVERS=/usr/local/lib/lsp_servers
 RUN mkdir -p $LSP_SERVERS
@@ -33,12 +46,14 @@ RUN apk add --no-cache --virtual .deps build-base bash ninja \
   && ln -s ../lib/lsp_servers/lua-language-server/bin/lua-language-server /usr/local/bin \
   && apk del .deps
 
-# Install html, css, json, eslint language servers
-RUN npm install -g vscode-langservers-extracted \
+RUN npm install -g \
+  # Install html, css, json, eslint language servers 
+  vscode-langservers-extracted \
   typescript typescript-language-server \
   yaml-language-server \
   dockerfile-language-server-nodejs \
-  svelte-language-server
+  svelte-language-server \
+  tree-sitter-cli
 
 # Copy neovim config to root home
 COPY config /root/.config
