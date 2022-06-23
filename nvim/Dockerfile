@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.16 AS base
 
 # Install neovim with docs
 RUN apk add --no-cache \
@@ -55,6 +55,17 @@ RUN npm install -g \
   svelte-language-server \
   tree-sitter-cli
 
+WORKDIR /data
+
+ENTRYPOINT [ "nvim" ]
+
+FROM base AS cached
+
+ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
+
+# Copy treesitter parsers from existing image to avoid their build time
+COPY --from=jllacuna/nvim $PARSER_DIR $PARSER_DIR
+
 # Copy neovim config to root home
 COPY config /root/.config
 
@@ -63,6 +74,12 @@ RUN apk add --no-cache --virtual .deps build-base \
   && nvim --headless -c 'autocmd User PackerComplete quitall' \
   && apk del .deps
 
-WORKDIR /data
+FROM base AS not_cached
 
-ENTRYPOINT [ "nvim" ]
+# Copy neovim config to root home
+COPY config /root/.config
+
+# Install plugins with packer.nvim
+RUN apk add --no-cache --virtual .deps build-base \
+  && nvim --headless -c 'autocmd User PackerComplete quitall' \
+  && apk del .deps

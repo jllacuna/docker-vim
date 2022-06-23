@@ -4,7 +4,9 @@ if not status_ok then
   return
 end
 
+vim.opt.runtimepath:append( "/usr/local/lib/treesitter_parsers")
 configs.setup {
+  parser_install_dir = "/usr/local/lib/treesitter_parsers",
   ensure_installed = {
     "astro", "bash", "c", "c_sharp", "cmake", "comment", "cpp", "css", "dart",
     "dockerfile", "eex", "elixir", "elm", "embedded_template", "erlang",
