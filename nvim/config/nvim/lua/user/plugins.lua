@@ -51,7 +51,10 @@ return packer.startup(function(use)
     "windwp/nvim-autopairs",   -- Autopairs, integrates with both cmp and treesitter
     config = function () require("user.autopairs") end,
   }
-  -- use "numToStr/Comment.nvim" -- Easily comment stuff
+  use {
+    "numToStr/Comment.nvim", -- Easily comment stuff
+    config = function () require("user.comment") end,
+  }
   -- use "kyazdani42/nvim-tree.lua"
   -- use "akinsho/bufferline.nvim"
   -- use "moll/vim-bbye"
@@ -123,7 +126,7 @@ return packer.startup(function(use)
     "nvim-treesitter/nvim-treesitter",
     config = function () require("user.treesitter") end,
   }
-  -- use "JoosepAlviste/nvim-ts-context-commentstring"
+  use "JoosepAlviste/nvim-ts-context-commentstring"
   --
   -- -- Git
   -- use "lewis6991/gitsigns.nvim"
