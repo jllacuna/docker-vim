@@ -57,7 +57,10 @@ return packer.startup(function(use)
   }
   use "godlygeek/tabular"
   use "windwp/nvim-ts-autotag"
-  -- use "kyazdani42/nvim-tree.lua"
+  use {
+    "kyazdani42/nvim-tree.lua",
+    config = function () require("user.tree") end,
+  }
   -- use "akinsho/bufferline.nvim"
   -- use "moll/vim-bbye"
   -- use "nvim-lualine/lualine.nvim"
