@@ -52,9 +52,10 @@ return packer.startup(function(use)
     config = function () require("user.autopairs") end,
   }
   use {
-    "numToStr/Comment.nvim", -- Easily comment stuff
+    "numToStr/Comment.nvim",   -- Easily comment stuff
     config = function () require("user.comment") end,
   }
+  use "godlygeek/tabular"
   -- use "kyazdani42/nvim-tree.lua"
   -- use "akinsho/bufferline.nvim"
   -- use "moll/vim-bbye"
@@ -81,22 +82,22 @@ return packer.startup(function(use)
 
   -- cmp plugins
   use {
-    "hrsh7th/nvim-cmp", -- The completion plugin
+    "hrsh7th/nvim-cmp",          -- The completion plugin
     config = function () require("user.cmp") end,
   }
-  use "hrsh7th/cmp-buffer" -- buffer completions
-  use "hrsh7th/cmp-path" -- path completions
-  use "hrsh7th/cmp-cmdline" -- cmdline completions
-  use "hrsh7th/cmp-nvim-lua" -- Neovim Lua runtime API
+  use "hrsh7th/cmp-buffer"       -- buffer completions
+  use "hrsh7th/cmp-path"         -- path completions
+  use "hrsh7th/cmp-cmdline"      -- cmdline completions
+  use "hrsh7th/cmp-nvim-lua"     -- Neovim Lua runtime API
   use "saadparwaiz1/cmp_luasnip" -- snippet completions
-  use "hrsh7th/cmp-nvim-lsp"
+  use "hrsh7th/cmp-nvim-lsp"     -- lsp completions
 
   -- snippets
-  use "L3MON4D3/LuaSnip" --snippet engine
+  use "L3MON4D3/LuaSnip"             -- snippet engine
   use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
   -- LSP
-   -- simple to use language server installer
+  -- simple to use language server installer
   use {
     "williamboman/nvim-lsp-installer",
     requires = {{"neovim/nvim-lspconfig" }},
@@ -127,8 +128,8 @@ return packer.startup(function(use)
     config = function () require("user.treesitter") end,
   }
   use "JoosepAlviste/nvim-ts-context-commentstring"
-  --
-  -- -- Git
+
+  -- Git
   -- use "lewis6991/gitsigns.nvim"
 
   -- Automatically set up your configuration after cloning packer.nvim
