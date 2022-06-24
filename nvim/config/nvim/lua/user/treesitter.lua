@@ -48,4 +48,7 @@ configs.setup {
     enable = true,
     enable_autocmd = false, -- For Comment.nvim
   },
+  autotag = {
+    enable = true,
+  },
 }
