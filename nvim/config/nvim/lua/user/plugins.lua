@@ -86,15 +86,16 @@ return packer.startup(function(use)
 
   -- cmp plugins
   use {
-    "hrsh7th/nvim-cmp",          -- The completion plugin
+    "hrsh7th/nvim-cmp",                     -- The completion plugin
     config = function () require("user.cmp") end,
   }
-  use "hrsh7th/cmp-buffer"       -- buffer completions
-  use "hrsh7th/cmp-path"         -- path completions
-  use "hrsh7th/cmp-cmdline"      -- cmdline completions
-  use "hrsh7th/cmp-nvim-lua"     -- Neovim Lua runtime API
-  use "saadparwaiz1/cmp_luasnip" -- snippet completions
-  use "hrsh7th/cmp-nvim-lsp"     -- lsp completions
+  use "hrsh7th/cmp-buffer"                  -- buffer completions
+  use "hrsh7th/cmp-path"                    -- path completions
+  use "hrsh7th/cmp-cmdline"                 -- cmdline completions
+  use "hrsh7th/cmp-nvim-lua"                -- Neovim Lua runtime API
+  use "saadparwaiz1/cmp_luasnip"            -- snippet completions
+  use "hrsh7th/cmp-nvim-lsp"                -- lsp completions
+  use "hrsh7th/cmp-nvim-lsp-signature-help" -- signature help
 
   -- snippets
   use "L3MON4D3/LuaSnip"             -- snippet engine
