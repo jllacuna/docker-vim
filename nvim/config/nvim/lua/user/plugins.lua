@@ -61,28 +61,30 @@ return packer.startup(function(use)
     "kyazdani42/nvim-tree.lua",
     config = function () require("user.tree") end,
   }
-  -- use "akinsho/bufferline.nvim" # PRIORITY
+  -- use "akinsho/bufferline.nvim" -- PRIORITY
   -- use "moll/vim-bbye"
-  -- use "nvim-lualine/lualine.nvim" # PRIORITY
-  -- use "Mephistophiles/surround.nvim" # PRIORITY
-  -- use "akinsho/toggleterm.nvim" # NIX, no point in having a terminal to the docker container
-  -- use "ahmedkhalf/project.nvim" # NIX, since running inside docker container, no access to surrounding folders or other projects
-  -- use "lewis6991/impatient.nvim" # Not sure how this will work with docker. May not speed anything up since starting the container seems to be the slow part
-  -- use "lukas-reineke/indent-blankline.nvim" # Try this out. Might not need it but might be nice to have available to toggle
-  -- use "goolord/alpha-nvim" # NIX, not much utility
+  -- use "nvim-lualine/lualine.nvim" -- PRIORITY
+  -- use "Mephistophiles/surround.nvim" -- PRIORITY
+  -- use "akinsho/toggleterm.nvim" -- NIX, no point in having a terminal to the docker container
+  -- use "ahmedkhalf/project.nvim" -- NIX, since running inside docker container, no access to surrounding folders or other projects
+  -- use "lewis6991/impatient.nvim" -- Not sure how this will work with docker. May not speed anything up since starting the container seems to be the slow part
+  -- use { -- NIX, too busy, not necessary
+  --   "lukas-reineke/indent-blankline.nvim",
+  --   config = function () require("indent_blankline").setup() end,
+  -- }
+  -- use "goolord/alpha-nvim" -- NIX, not much utility
   use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
-  -- use "folke/which-key.nvim" # Check this out
+  use {
+    "folke/which-key.nvim", -- popup window with key binding suggestions
+    config = function () require("which-key").setup() end,
+  }
 
   -- Colorschemes
-  use {
-    "metalelf0/jellybeans-nvim",
-    requires = {{"rktjmp/lush.nvim"}}
-  }
   use {
     "kyazdani42/nvim-web-devicons",
     config = function () require("user.devicons") end,
   }
-  -- use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
+  use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
   -- use "lunarvim/darkplus.nvim"
 
   -- cmp plugins
