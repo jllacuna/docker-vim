@@ -61,7 +61,8 @@ return packer.startup(function(use)
     "kyazdani42/nvim-tree.lua",
     config = function () require("user.tree") end,
   }
-  -- use "akinsho/bufferline.nvim" -- PRIORITY
+  -- use "akinsho/bufferline.nvim" -- NIX
+  -- use "nanozuki/tabby.nvim" -- PRIORITY
   -- use "moll/vim-bbye"
   -- use "nvim-lualine/lualine.nvim" -- PRIORITY
   -- use "Mephistophiles/surround.nvim" -- PRIORITY
@@ -76,7 +77,7 @@ return packer.startup(function(use)
   use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
   use {
     "folke/which-key.nvim", -- popup window with key binding suggestions
-    config = function () require("which-key").setup() end,
+    config = function () require("user.whichkey") end,
   }
 
   -- Colorschemes
