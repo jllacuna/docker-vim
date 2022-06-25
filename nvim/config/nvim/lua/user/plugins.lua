@@ -70,6 +70,13 @@ return packer.startup(function(use)
     "kdheepak/tabline.nvim",
     config = function () require("user.tabline") end,
   }
+  -- CONTINUE HERE
+  -- TODO: Install surrond plugin
+  -- TODO: Review vim plugins to see what else to install
+  -- TODO: Finish YT series for additional tips
+  -- TODO: Install other LSP servers (check vim for syntax files)
+  -- TODO: Clean up code
+  -- TODO: Tag 1.0 release
   -- use "Mephistophiles/surround.nvim" -- PRIORITY
   -- use "lewis6991/impatient.nvim" -- Not sure how this will work with docker. May not speed anything up since starting the container seems to be the slow part
   use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
@@ -111,6 +118,10 @@ return packer.startup(function(use)
     config = function () require("user.lsp") end,
   }
   use "jose-elias-alvarez/typescript.nvim" -- tsserver lsp intgration
+  use {
+    "SmiteshP/nvim-navic",
+    config = function () require("user.navic") end,
+  }
   -- use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
   -- use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
 
