@@ -61,19 +61,17 @@ return packer.startup(function(use)
     "kyazdani42/nvim-tree.lua",
     config = function () require("user.tree") end,
   }
-  -- use "akinsho/bufferline.nvim" -- NIX
-  -- use "nanozuki/tabby.nvim" -- PRIORITY
   -- use "moll/vim-bbye"
-  -- use "nvim-lualine/lualine.nvim" -- PRIORITY
+  use {
+    "nvim-lualine/lualine.nvim", -- Status line
+    config = function () require("user.lualine") end,
+  }
+  use {
+    "kdheepak/tabline.nvim",
+    config = function () require("user.tabline") end,
+  }
   -- use "Mephistophiles/surround.nvim" -- PRIORITY
-  -- use "akinsho/toggleterm.nvim" -- NIX, no point in having a terminal to the docker container
-  -- use "ahmedkhalf/project.nvim" -- NIX, since running inside docker container, no access to surrounding folders or other projects
   -- use "lewis6991/impatient.nvim" -- Not sure how this will work with docker. May not speed anything up since starting the container seems to be the slow part
-  -- use { -- NIX, too busy, not necessary
-  --   "lukas-reineke/indent-blankline.nvim",
-  --   config = function () require("indent_blankline").setup() end,
-  -- }
-  -- use "goolord/alpha-nvim" -- NIX, not much utility
   use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
   use {
     "folke/which-key.nvim", -- popup window with key binding suggestions
