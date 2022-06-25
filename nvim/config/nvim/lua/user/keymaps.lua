@@ -94,6 +94,10 @@ keymap("n", "gi", "<cmd>Telescope lsp_implementations<cr>", opts)
 -- Cheatsheet --
 keymap("n", "<leader>cs", "<cmd>Cheatsheet<cr>", opts)
 
+-- Treesitter Playground --
+keymap("n", "<leader>s", "<cmd>TSHighlightCapturesUnderCursor<cr>", opts)
+keymap("n", "<leader>p", "<cmd>TSPlaygroundToggle<cr>", opts)
+
 -- Toggle line numbers
 keymap("n", "<leader>l", ":set nonumber!<CR>", opts)
 

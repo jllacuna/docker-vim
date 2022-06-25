@@ -90,8 +90,12 @@ return packer.startup(function(use)
     "kyazdani42/nvim-web-devicons",
     config = function () require("user.devicons") end,
   }
-  use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
-  -- use "lunarvim/darkplus.nvim"
+  use {
+    "jllacuna/jellybeans-nvim",
+    requires = {{"rktjmp/lush.nvim"}}
+  }
+  -- use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
+  -- use "mhartington/oceanic-next"
 
   -- cmp plugins
   use {
@@ -146,6 +150,7 @@ return packer.startup(function(use)
     config = function () require("user.treesitter") end,
   }
   use "JoosepAlviste/nvim-ts-context-commentstring"
+  use "nvim-treesitter/playground"
 
   -- Git
   use {
