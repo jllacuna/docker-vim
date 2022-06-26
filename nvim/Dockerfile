@@ -58,7 +58,6 @@ ENV PATH=$PATH:$LSP_SERVERS/go/bin
 RUN go install golang.org/x/tools/gopls@latest \
   && mv /root/go $LSP_SERVERS
 
-
 # Install various language servers with node/npm
 RUN npm install -g \
   # Install html, css, json, eslint language servers 
@@ -68,7 +67,8 @@ RUN npm install -g \
   dockerfile-language-server-nodejs \
   svelte-language-server \
   tree-sitter-cli \
-  @lifeart/ember-language-server
+  @lifeart/ember-language-server \
+  pyright
 
 WORKDIR /data
 

@@ -11,7 +11,6 @@ if not lsp_status_ok then
 end
 
 -- TODO:
--- go
 -- ruby
 -- markdown
 -- swift
@@ -28,6 +27,7 @@ local servers = {
   "svelte",
   "ember",
   "gopls",
+  "pyright",
 }
 
 lsp_installer.setup {
