@@ -1,3 +1,6 @@
+#
+# Stage: base
+#
 FROM alpine:3.16 AS base
 
 # Install neovim with docs
@@ -88,10 +91,16 @@ RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/te
 # Allows gopls to reference our imported modules
 ENV GOPATH=/workspace/go
 
+# Set XDG_CACHE_HOME for lewis6991/impatient.nvim plugin
+ENV XDG_CACHE_HOME=/usr/local/lib/xdg
+
 WORKDIR /data
 
 ENTRYPOINT [ "nvim" ]
 
+#
+# Stage: cached
+#
 FROM base AS cached
 
 ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
@@ -107,6 +116,12 @@ RUN apk add --no-cache --virtual .deps build-base \
   && nvim --headless -c 'autocmd User PackerComplete quitall' \
   && apk del .deps
 
+# Prime plugin cache for lewis6991/impatient.nvim
+RUN nvim --headless -c 'quitall'
+
+#
+# Stage: not_cached
+#
 FROM base AS not_cached
 
 # Copy neovim config to root home
@@ -116,3 +131,6 @@ COPY config /root/.config
 RUN apk add --no-cache --virtual .deps build-base \
   && nvim --headless -c 'autocmd User PackerComplete quitall' \
   && apk del .deps
+
+# Prime plugin cache for lewis6991/impatient.nvim
+RUN nvim --headless -c 'quitall'

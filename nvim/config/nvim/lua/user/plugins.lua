@@ -31,9 +31,18 @@ packer.init {
   },
 }
 
+-- CONTINUE HERE
+-- TODO: Finish YT series for additional tips
+-- TODO: Clean up code
+-- TODO: Tag 1.0 release
+
 -- Install your plugins here
 return packer.startup(function(use)
   -- My plugins here
+  use {
+    "lewis6991/impatient.nvim", -- Speed up loading lua plugins
+    config = function () require("impatient") end,
+  }
   use "wbthomason/packer.nvim" -- Have packer manage itself
   use "nvim-lua/popup.nvim"    -- An implementation of the Popup API from vim in Neovim
   use "nvim-lua/plenary.nvim"  -- Useful lua functions used by lots of plugins
@@ -61,11 +70,6 @@ return packer.startup(function(use)
     "kdheepak/tabline.nvim",
     config = function () require("user.tabline") end,
   }
-  -- CONTINUE HERE
-  -- TODO: Finish YT series for additional tips
-  -- TODO: Clean up code
-  -- TODO: Tag 1.0 release
-  -- use "lewis6991/impatient.nvim" -- Not sure how this will work with docker. May not speed anything up since starting the container seems to be the slow part
   use {
     "ur4ltz/surround.nvim",
     config = function()
