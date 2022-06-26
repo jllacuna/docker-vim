@@ -102,9 +102,12 @@ keymap("n", "<leader>p", "<cmd>TSPlaygroundToggle<cr>", opts)
 -- Glow (Markdown Preview) --
 keymap("n", "<leader>m", "<cmd>Glow<cr>", opts)
 
--- Todo Comments
+-- Todo Comments --
 keymap("n", "<leader>t", "<cmd>TodoQuickFix<cr>", opts)
 keymap("n", "<leader>ft", "<cmd>TodoTelescope<cr>", opts)
+
+-- Bbye --
+keymap("n", "<leader>bd", "<cmd>Bdelete<cr>", opts)
 
 -- Toggle line numbers
 keymap("n", "<leader>l", ":set nonumber!<CR>", opts)

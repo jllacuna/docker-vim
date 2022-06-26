@@ -15,14 +15,6 @@ if fn.empty(fn.glob(install_path)) > 0 then
   vim.cmd [[packadd packer.nvim]]
 end
 
--- Autocommand that reloads neovim whenever you save the plugins.lua file
--- vim.cmd [[
---   augroup packer_user_config
---     autocmd!
---     autocmd BufWritePost plugins.lua source <afile> | PackerSync
---   augroup end
--- ]]
-
 -- Use a protected call so we don't error out on first use
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
@@ -73,7 +65,6 @@ return packer.startup(function(use)
   -- TODO: Finish YT series for additional tips
   -- TODO: Clean up code
   -- TODO: Tag 1.0 release
-  -- use "moll/vim-bbye"
   -- use "lewis6991/impatient.nvim" -- Not sure how this will work with docker. May not speed anything up since starting the container seems to be the slow part
   use {
     "ur4ltz/surround.nvim",
@@ -98,6 +89,7 @@ return packer.startup(function(use)
     "folke/todo-comments.nvim", -- Manage todos, fix, hack, etc.
     config = function() require("todo-comments").setup() end
   }
+  use "moll/vim-bbye" -- Delete buffers without closing windows
 
   -- Colorschemes
   use {
