@@ -61,7 +61,6 @@ return packer.startup(function(use)
     "kyazdani42/nvim-tree.lua",
     config = function () require("user.tree") end,
   }
-  -- use "moll/vim-bbye"
   use {
     "nvim-lualine/lualine.nvim", -- Status line
     config = function () require("user.lualine") end,
@@ -74,6 +73,8 @@ return packer.startup(function(use)
   -- TODO: Finish YT series for additional tips
   -- TODO: Clean up code
   -- TODO: Tag 1.0 release
+  -- use "moll/vim-bbye"
+  -- use "lewis6991/impatient.nvim" -- Not sure how this will work with docker. May not speed anything up since starting the container seems to be the slow part
   use {
     "ur4ltz/surround.nvim",
     config = function()
@@ -82,17 +83,20 @@ return packer.startup(function(use)
       }
     end
   }
-  -- use "lewis6991/impatient.nvim" -- Not sure how this will work with docker. May not speed anything up since starting the container seems to be the slow part
   use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
   use {
-    "folke/which-key.nvim", -- popup window with key binding suggestions
+    "folke/which-key.nvim", -- Popup window with key binding suggestions
     config = function () require("user.whichkey") end,
   }
   use {
-    "ellisonleao/glow.nvim",
+    "ellisonleao/glow.nvim", -- Markdown preview
     config = function()
       vim.g.glow_border = "rounded"
     end,
+  }
+  use {
+    "folke/todo-comments.nvim", -- Manage todos, fix, hack, etc.
+    config = function() require("todo-comments").setup() end
   }
 
   -- Colorschemes
@@ -133,7 +137,7 @@ return packer.startup(function(use)
   }
   use "jose-elias-alvarez/typescript.nvim" -- tsserver lsp intgration
   use {
-    "SmiteshP/nvim-navic",
+    "SmiteshP/nvim-navic", -- Display code context in status line
     config = function () require("user.navic") end,
   }
   -- use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
@@ -141,16 +145,15 @@ return packer.startup(function(use)
 
   -- Telescope
   use {
-    'nvim-telescope/telescope-fzf-native.nvim',
+    'nvim-telescope/telescope-fzf-native.nvim', -- Fase fuzzy finder for telescope
     run = 'make',
   }
   use {
     "nvim-telescope/telescope.nvim",
     config = function () require("user.telescope") end,
   }
-  use "nvim-telescope/telescope-node-modules.nvim"
   use {
-    "sudormrfbin/cheatsheet.nvim",
+    "sudormrfbin/cheatsheet.nvim", -- Displays a cheatsheet of commands, keymaps, nerd font icons, etc. in telescope
     config = function () require("user.cheatsheet") end,
   }
 
@@ -159,12 +162,12 @@ return packer.startup(function(use)
     "nvim-treesitter/nvim-treesitter",
     config = function () require("user.treesitter") end,
   }
-  use "JoosepAlviste/nvim-ts-context-commentstring"
+  use "JoosepAlviste/nvim-ts-context-commentstring" -- Changes format of comments based on location within the file. Useful for JSX and svelte
   use "nvim-treesitter/playground"
 
   -- Git
   use {
-    "lewis6991/gitsigns.nvim",
+    "lewis6991/gitsigns.nvim", -- Displays git change indicators in the sign column
     config = function () require("user.gitsigns") end,
   }
 
