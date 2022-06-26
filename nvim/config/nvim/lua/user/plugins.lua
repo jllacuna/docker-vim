@@ -163,6 +163,9 @@ return packer.startup(function(use)
     config = function () require("user.gitsigns") end,
   }
 
+  -- Coffeescript
+  use "kchmck/vim-coffee-script"
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then

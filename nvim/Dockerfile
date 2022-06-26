@@ -1,3 +1,5 @@
+FROM go:latest as go
+
 FROM alpine:3.16 AS base
 
 # Install neovim with docs
@@ -9,6 +11,11 @@ RUN apk add --no-cache \
 RUN apk add --no-cache \
   nodejs \
   npm
+
+# Install go
+ARG GO_DIR=/usr/local/go
+COPY --from=golang:latest $GO_DIR $GO_DIR
+ENV PATH=$PATH:$GO_DIR/bin
 
 # Install telescope dependencies
 RUN apk add --no-cache \
@@ -46,6 +53,13 @@ RUN apk add --no-cache --virtual .deps build-base bash ninja \
   && ln -s ../lib/lsp_servers/lua-language-server/bin/lua-language-server /usr/local/bin \
   && apk del .deps
 
+# Install gopls (go language server)
+ENV PATH=$PATH:$LSP_SERVERS/go/bin
+RUN go install golang.org/x/tools/gopls@latest \
+  && mv /root/go $LSP_SERVERS
+
+
+# Install various language servers with node/npm
 RUN npm install -g \
   # Install html, css, json, eslint language servers 
   vscode-langservers-extracted \
@@ -53,7 +67,8 @@ RUN npm install -g \
   yaml-language-server \
   dockerfile-language-server-nodejs \
   svelte-language-server \
-  tree-sitter-cli
+  tree-sitter-cli \
+  @lifeart/ember-language-server
 
 WORKDIR /data
 

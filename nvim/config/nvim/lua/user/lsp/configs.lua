@@ -15,7 +15,7 @@ end
 -- ruby
 -- markdown
 -- swift
--- ember? hbs
+-- python
 
 local servers = {
   "jsonls",
@@ -25,7 +25,9 @@ local servers = {
   "tsserver",
   "yamlls",
   "dockerls",
-  "svelte"
+  "svelte",
+  "ember",
+  "gopls",
 }
 
 lsp_installer.setup {
