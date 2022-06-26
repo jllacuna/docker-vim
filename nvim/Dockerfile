@@ -12,6 +12,11 @@ RUN apk add --no-cache \
   nodejs \
   npm
 
+# Install ruby
+RUN apk add --no-cache \
+  ruby \
+  ruby-dev
+
 # Install go
 ARG GO_DIR=/usr/local/go
 COPY --from=golang:latest $GO_DIR $GO_DIR
@@ -57,6 +62,11 @@ RUN apk add --no-cache --virtual .deps build-base bash ninja \
 ENV PATH=$PATH:$LSP_SERVERS/go/bin
 RUN go install golang.org/x/tools/gopls@latest \
   && mv /root/go $LSP_SERVERS
+
+# Install solargraph (ruby language server)
+RUN apk add --no-cache --virtual .deps build-base \
+  && gem install solargraph \
+  && apk del .deps
 
 # Install various language servers with node/npm
 RUN npm install -g \

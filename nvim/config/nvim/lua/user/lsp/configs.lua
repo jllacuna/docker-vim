@@ -11,10 +11,8 @@ if not lsp_status_ok then
 end
 
 -- TODO:
--- ruby
 -- markdown
 -- swift
--- python
 
 local servers = {
   "jsonls",
@@ -28,6 +26,7 @@ local servers = {
   "ember",
   "gopls",
   "pyright",
+  "solargraph",
 }
 
 lsp_installer.setup {
