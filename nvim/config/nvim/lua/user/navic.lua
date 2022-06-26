@@ -5,5 +5,7 @@ if not status_ok then
 end
 
 navic.setup {
-  highlight = false
+  highlight = true,
+  separator = "  ",
 }
+
