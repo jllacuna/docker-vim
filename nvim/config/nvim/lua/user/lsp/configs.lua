@@ -10,10 +10,6 @@ if not lsp_status_ok then
   return
 end
 
--- TODO:
--- markdown
--- swift
-
 local servers = {
   "jsonls",
   "sumneko_lua",
