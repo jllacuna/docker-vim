@@ -1,5 +1,3 @@
-FROM go:latest as go
-
 FROM alpine:3.16 AS base
 
 # Install neovim with docs
@@ -85,6 +83,10 @@ RUN npm install -g \
 # https://github.com/charmbracelet/glow
 RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing \
   glow
+
+# Set GOPATH to our volumed workspace
+# Allows gopls to reference our imported modules
+ENV GOPATH=/workspace/go
 
 WORKDIR /data
 
