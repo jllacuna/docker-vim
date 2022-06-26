@@ -71,7 +71,6 @@ return packer.startup(function(use)
     config = function () require("user.tabline") end,
   }
   -- CONTINUE HERE
-  -- TODO: Review vim plugins to see what else to install
   -- TODO: Finish YT series for additional tips
   -- TODO: Install other LSP servers (check vim for syntax files)
   -- TODO: Clean up code

@@ -10,7 +10,12 @@ if not lsp_status_ok then
   return
 end
 
--- TODO: go, ruby, markdown
+-- TODO:
+-- go
+-- ruby
+-- markdown
+-- swift
+-- ember? hbs
 
 local servers = {
   "jsonls",
