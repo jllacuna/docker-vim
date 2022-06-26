@@ -72,7 +72,6 @@ return packer.startup(function(use)
   }
   -- CONTINUE HERE
   -- TODO: Finish YT series for additional tips
-  -- TODO: Install other LSP servers (check vim for syntax files)
   -- TODO: Clean up code
   -- TODO: Tag 1.0 release
   use {
@@ -88,6 +87,12 @@ return packer.startup(function(use)
   use {
     "folke/which-key.nvim", -- popup window with key binding suggestions
     config = function () require("user.whichkey") end,
+  }
+  use {
+    "ellisonleao/glow.nvim",
+    config = function()
+      vim.g.glow_border = "rounded"
+    end,
   }
 
   -- Colorschemes

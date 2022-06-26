@@ -80,6 +80,12 @@ RUN npm install -g \
   @lifeart/ember-language-server \
   pyright
 
+# Install glow from alpine/edge/testing
+# CLI Markdown reader
+# https://github.com/charmbracelet/glow
+RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+  glow
+
 WORKDIR /data
 
 ENTRYPOINT [ "nvim" ]
