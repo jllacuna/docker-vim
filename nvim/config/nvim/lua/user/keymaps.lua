@@ -91,26 +91,33 @@ keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", merge({ desc = 'Search
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", merge({ desc = 'Find buffers' }, opts))
 keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", merge({ desc = 'Find help tags' }, opts))
 keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", merge({ desc = 'Find diagnostics' }, opts))
+vim.keymap.set('n', '<leader>fw', function()
+  local word = vim.call('expand', '<cword>');
+  local status_ok, tb = pcall(require, 'telescope.builtin')
+  if status_ok then
+    tb.live_grep { default_text = word }
+  end
+end, { desc = 'Find word under cursor' })
 
 -- Cheatsheet --
 keymap("n", "<leader>cs", "<cmd>Cheatsheet<cr>", opts)
 
 -- Treesitter Playground --
-keymap("n", "<leader>s", "<cmd>TSHighlightCapturesUnderCursor<cr>", opts)
-keymap("n", "<leader>p", "<cmd>TSPlaygroundToggle<cr>", opts)
+keymap("n", "<leader>s", "<cmd>TSHighlightCapturesUnderCursor<cr>", merge({ desc = 'Show syntax highlight groups' }, opts))
+keymap("n", "<leader>p", "<cmd>TSPlaygroundToggle<cr>", merge({ desc = 'Toggle treesitter playground' }, opts))
 
 -- Glow (Markdown Preview) --
-keymap("n", "<leader>m", "<cmd>Glow<cr>", opts)
+keymap("n", "<leader>m", "<cmd>Glow<cr>", merge({ desc = 'Show Markdown Preview' }, opts))
 
 -- Todo Comments --
-keymap("n", "<leader>t", "<cmd>TodoQuickFix<cr>", opts)
-keymap("n", "<leader>ft", "<cmd>TodoTelescope<cr>", opts)
+keymap("n", "<leader>t", "<cmd>TodoQuickFix<cr>", merge({ desc = 'Show TODOs in quickfix' }, opts))
+keymap("n", "<leader>ft", "<cmd>TodoTelescope<cr>", merge({ desc = 'Find TODOs' }, opts))
 
 -- Bbye --
-keymap("n", "<leader>bd", "<cmd>Bdelete<cr>", opts)
+keymap("n", "<leader>bd", "<cmd>Bdelete<cr>", merge({ desc = 'Delete buffer keep window' }, opts))
 
 -- Toggle line numbers
-keymap("n", "<leader>l", ":set nonumber!<CR>", opts)
+keymap("n", "<leader>l", ":set nonumber!<CR>", merge({ desc = 'Toggle line numbers' }, opts))
 
 -- Add lines above and below
 keymap("n", "OO", "O<ESC>", opts)
@@ -124,13 +131,7 @@ keymap("n", "tj", ":tabp<CR>", opts)
 keymap("n", "tk", ":tabn<CR>", opts)
 
 -- Reformat
-keymap("n", "fff", "gg=G", opts)
+keymap("n", "fff", "gg=G", merge({ desc = 'Fix indents' }, opts))
 
 -- Convert tabs to spaces and remove extra whitespace
-keymap("n", "sss", ':retab<CR>:%s/\\s\\+$//c<CR>', opts)
-
--- Search for TODOs
-keymap("n", "td", ":vimgrep TODO **/*<CR>:cw<CR>", opts)
-
--- Grep word under cursor (not working)
--- keymap("n", "K", ':grep! "\\b<C-R><C-W>\\b"<CR>:cw<CR>', opts)
+keymap("n", "sss", ':retab<CR>:%s/\\s\\+$//c<CR>', merge({ desc = 'Fix whitespace' }, opts))
