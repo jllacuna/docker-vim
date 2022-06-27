@@ -5,6 +5,22 @@ local term_opts = { silent = true }
 -- Shorten function name
 local keymap = vim.api.nvim_set_keymap
 
+-- Merge options. WARNING: Overwrites t1
+local function merge(t1, t2)
+  for k,v in pairs(t2) do
+    if type(v) == "table" then
+      if type(t1[k] or false) == "table" then
+        merge(t1[k] or {}, t2[k] or {})
+      else
+        t1[k] = v
+      end
+    else
+      t1[k] = v
+    end
+  end
+  return t1
+end
+
 --Remap space as leader key
 keymap("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
@@ -28,7 +44,7 @@ keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
 -- NvimTree
-keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+keymap("n", "<leader>e", ":NvimTreeToggle<cr>", merge({ desc = 'File explorer' }, opts))
 
 -- Disable arrow keys
 keymap("", "<Up>", "", opts)
@@ -54,17 +70,6 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 -- Press jk fast to exit insert mode
 keymap("i", "jk", "<ESC>", opts)
 
--- Visual --
--- Stay in indent mode
--- keymap("v", "<", "<gv", opts)
--- keymap("v", ">", ">gv", opts)
-
--- Move text up and down
--- keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
--- keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
--- keymap("v", "<A-j>", ":m .+1<CR>==", opts)
--- keymap("v", "<A-k>", ":m .-2<CR>==", opts)
-
 -- Keep original copy string when pasting
 keymap("v", "p", '"_dP', opts)
 
@@ -72,8 +77,6 @@ keymap("v", "p", '"_dP', opts)
 -- Move text up and down
 keymap("x", "J", ":move '>+1<CR>gv-gv", opts)
 keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
--- keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
--- keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
 -- Terminal --
 -- Better terminal navigation
@@ -83,14 +86,11 @@ keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
 -- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
 -- Telescope --
-keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
-keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
-keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
-keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
-keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", opts)
-keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
-keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
-keymap("n", "gi", "<cmd>Telescope lsp_implementations<cr>", opts)
+keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", merge({ desc = 'Find files' }, opts))
+keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", merge({ desc = 'Search in files' }, opts))
+keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", merge({ desc = 'Find buffers' }, opts))
+keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", merge({ desc = 'Find help tags' }, opts))
+keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", merge({ desc = 'Find diagnostics' }, opts))
 
 -- Cheatsheet --
 keymap("n", "<leader>cs", "<cmd>Cheatsheet<cr>", opts)

@@ -32,6 +32,9 @@ packer.init {
 }
 
 -- CONTINUE HERE
+-- TODO: Install plugins for code actions: https://github.com/kosayoda/nvim-lightbulb, https://github.com/weilbith/nvim-code-action-menu
+-- TODO: Install vim-repeat: https://github.com/tpope/vim-repeat
+-- TODO: Provide descriptions for all custom keymaps, make sure they display properly with which key
 -- TODO: Finish YT series for additional tips
 -- TODO: Clean up code
 -- TODO: Tag 1.0 release
