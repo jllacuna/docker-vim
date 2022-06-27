@@ -11,6 +11,9 @@ if not navic_status_ok then
 end
 
 lualine.setup {
+  options = {
+    disabled_filetypes = { 'NvimTree' },
+  },
   sections = {
     lualine_c = {
       "filename",
