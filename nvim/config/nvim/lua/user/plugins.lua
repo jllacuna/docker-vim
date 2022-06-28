@@ -31,7 +31,6 @@ packer.init {
   },
 }
 
--- CONTINUE HERE
 -- TODO: Finish YT series for additional tips
 -- TODO: Clean up code
 -- TODO: Tag 1.0 release
