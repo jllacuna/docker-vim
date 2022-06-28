@@ -32,8 +32,6 @@ packer.init {
 }
 
 -- CONTINUE HERE
--- TODO: Install plugins for code actions: https://github.com/kosayoda/nvim-lightbulb, https://github.com/weilbith/nvim-code-action-menu
--- TODO: Install vim-repeat: https://github.com/tpope/vim-repeat
 -- TODO: Finish YT series for additional tips
 -- TODO: Clean up code
 -- TODO: Tag 1.0 release
@@ -48,6 +46,7 @@ return packer.startup(function(use)
   use "wbthomason/packer.nvim" -- Have packer manage itself
   use "nvim-lua/popup.nvim"    -- An implementation of the Popup API from vim in Neovim
   use "nvim-lua/plenary.nvim"  -- Useful lua functions used by lots of plugins
+  use "tpope/vim-repeat"       -- Allows plugins to be repeated with "."
   use "RRethy/vim-illuminate"  -- highlight other instances of the word under cursor
   use "b0o/schemastore.nvim"   -- JSON schemas from schemastore.org
   use {
@@ -93,9 +92,13 @@ return packer.startup(function(use)
   }
   use {
     "folke/todo-comments.nvim", -- Manage todos, fix, hack, etc.
-    config = function() require("todo-comments").setup() end
+    config = function() require("todo-comments").setup() end,
   }
   use "moll/vim-bbye" -- Delete buffers without closing windows
+  use {
+    "kosayoda/nvim-lightbulb", -- Displays lightbulb in sign column when code actions are available
+    config = function () require("user.lightbulb") end,
+  }
 
   -- Colorschemes
   use {
