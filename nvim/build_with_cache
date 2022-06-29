@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 
-docker build -t jllacuna/nvim --target cached .
+# Builds image by copying treesitter parsers from prior jllacuna/nvim image
+# Useful when you want to make some config changes and need a fast build
+docker build -t jllacuna/nvim --target cached --progress plain .

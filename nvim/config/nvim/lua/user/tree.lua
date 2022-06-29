@@ -4,8 +4,8 @@ if not status_ok then
   return
 end
 
--- following options are the default
--- each of these are documented in `:help nvim-tree.OPTION_NAME`
+-- Following options are the default
+-- Each of these are documented in `:help nvim-tree.OPTION_NAME`
 nvim_tree.setup {
   renderer = {
     icons = {
@@ -32,7 +32,7 @@ nvim_tree.setup {
     },
   },
   disable_netrw = true,
-  hijack_netrw = false, -- default
+  hijack_netrw = false,  -- default
   open_on_setup = false, -- default
   ignore_ft_on_setup = { -- not relevant if open_on_setup = false
     -- "startify",
@@ -41,7 +41,7 @@ nvim_tree.setup {
   },
   open_on_tab = false,
   hijack_cursor = true, -- default false, keeps cursor on first letter of filename
-  update_cwd = false, -- default
+  update_cwd = false,   -- default
   diagnostics = {
     enable = true,
     icons = {
@@ -57,7 +57,7 @@ nvim_tree.setup {
     ignore_list = {}, -- default
   },
   system_open = {
-    cmd = "", -- default
+    cmd = "",  -- default
     args = {}, -- default
   },
   filters = {

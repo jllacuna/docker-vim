@@ -4,9 +4,13 @@ if not status_ok then
   return
 end
 
+-- Store treesitter parsers in a separate folder so that we can cache them when building docker
 vim.opt.runtimepath:append( "/usr/local/lib/treesitter_parsers")
+
 configs.setup {
+  -- Tell plugin where we put the parsers
   parser_install_dir = "/usr/local/lib/treesitter_parsers",
+
   ensure_installed = {
     "astro", "bash", "c", "c_sharp", "cmake", "comment", "cpp", "css", "dart",
     "dockerfile", "eex", "elixir", "elm", "embedded_template", "erlang",
@@ -18,8 +22,10 @@ configs.setup {
     "surface", "svelte", "swift", "todotxt", "toml", "turtle", "typescript",
     "v", "vim", "vue", "yaml"
   }, -- one of "all" (not recommended), or a list of languages
-  sync_install = true, -- install languages synchronously (only applied to `ensure_installed`)
+
   -- WARNING: Leave sync_install to true so that Docker will compile the parsers into the image on build
+  sync_install = true, -- install languages synchronously (only applied to `ensure_installed`)
+
   -- ignore_install = {}, -- List of parsers to ignore installing
   autopairs = {
     enable = true,
@@ -35,14 +41,12 @@ configs.setup {
   },
   incremental_selection = {
     enable = true,
-    --[[
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-    ]]--
+    -- keymaps = {
+    --   init_selection = "gnn",
+    --   node_incremental = "grn",
+    --   scope_incremental = "grc",
+    --   node_decremental = "grm",
+    -- },
   },
   context_commentstring = {
     enable = true,
@@ -54,7 +58,7 @@ configs.setup {
   playground = {
     enable = true,
     -- disable = {},
-    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+    updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
     keybindings = {
       toggle_query_editor = 'o',

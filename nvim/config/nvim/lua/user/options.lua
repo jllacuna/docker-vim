@@ -32,7 +32,6 @@ local options = {
   wrap           = true,                                 -- display lines as one long line
   scrolloff      = 8,                                    -- min number of lines to keep above and below cursor when scrolling
   sidescrolloff  = 8,                                    -- min number of columns to keep before and after cursor when scrolling
-  -- guifont = "monospace:h17",                             -- the font used in graphical neovim applications
 }
 
 vim.opt.shortmess:append "c"
@@ -43,4 +42,3 @@ end
 
 vim.cmd "set whichwrap+=<,>,[,],h,l"
 vim.cmd [[set iskeyword+=-]]
-vim.cmd [[set formatoptions-=cro]] -- TODO: this doesn't seem to work

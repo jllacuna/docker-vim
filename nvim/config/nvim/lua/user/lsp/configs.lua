@@ -42,7 +42,7 @@ for _, server in pairs(servers) do
   if server == "tsserver" then
     require("typescript").setup({
       disable_commands = false, -- prevent the plugin from creating vim commands
-      debug = false, -- enable debug logging for commands
+      debug = false,            -- enable debug logging for commands
       server = opts,
     })
   else
