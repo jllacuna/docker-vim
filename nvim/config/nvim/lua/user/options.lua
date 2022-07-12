@@ -32,6 +32,7 @@ local options = {
   wrap           = true,                                 -- display lines as one long line
   scrolloff      = 8,                                    -- min number of lines to keep above and below cursor when scrolling
   sidescrolloff  = 8,                                    -- min number of columns to keep before and after cursor when scrolling
+  regexpengine   = 1,                                    -- Use old regular expression engine
 }
 
 vim.opt.shortmess:append "c"
