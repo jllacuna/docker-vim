@@ -1,3 +1,28 @@
 #!/usr/bin/env sh
 
-docker run -it --rm --cpus="2" -v "$PWD":/data -v "$HOME/workspace":/workspace jllacuna/nvim $@
+# Check if we're in a git project and get the root
+root=$(git rev-parse --show-toplevel 2>/dev/null)
+
+if [ -z "$root" ];
+then
+  # If not in a git project, open files from current working dir
+  root=$(pwd)
+  files=$@
+else
+  cwd=$(pwd)
+
+  if [ "$cwd" == "$root" ];
+  then
+    # If in the git project root, open files as given
+    files=$@
+  else
+    # Else calculate the path to files from git project root
+    files=""
+    for name in "$@"
+    do
+      files+="${cwd#"$root"/}/$name "
+    done
+  fi
+fi
+
+docker run -it --rm --platform linux/amd64 --cpus="2" -v "$root":/data -v "$HOME/workspace":/workspace jllacuna/nvim $files

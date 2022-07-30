@@ -1,7 +1,9 @@
 #
 # Stage: base
 #
-FROM alpine:3.16 AS base
+FROM --platform=linux/amd64 jllacuna/nvim AS cache
+FROM --platform=linux/amd64 golang:alpine AS golang
+FROM --platform=linux/amd64 alpine:3.16 AS base
 
 # Install neovim with docs
 RUN apk add --no-cache \
@@ -20,7 +22,7 @@ RUN apk add --no-cache \
 
 # Install go
 ARG GO_DIR=/usr/local/go
-COPY --from=golang:latest $GO_DIR $GO_DIR
+COPY --from=golang $GO_DIR $GO_DIR
 ENV PATH=$PATH:$GO_DIR/bin
 
 # Install telescope dependencies
@@ -106,7 +108,7 @@ FROM base AS cached
 ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
 
 # Copy treesitter parsers from existing image to avoid their build time
-COPY --from=jllacuna/nvim $PARSER_DIR $PARSER_DIR
+COPY --from=cache $PARSER_DIR $PARSER_DIR
 
 # Copy neovim config to root home
 COPY config /root/.config
