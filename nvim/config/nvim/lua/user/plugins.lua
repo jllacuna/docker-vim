@@ -57,7 +57,6 @@ return packer.startup(function(use)
     config = function () require("user.comment") end,
   }
   use "godlygeek/tabular"      -- Vertically align characters
-  use "windwp/nvim-ts-autotag" -- Complete SGML (XML, HTML, etc.) tags
   use {
     "kyazdani42/nvim-tree.lua", -- File explorer
     config = function () require("user.tree") end,
@@ -102,23 +101,26 @@ return packer.startup(function(use)
   -- Colorschemes
   use {
     "jllacuna/jellybeans-nvim", -- My fork of the jellbeans colorscheme
-    requires = {{"rktjmp/lush.nvim"}}
+    requires = {{ "rktjmp/lush.nvim" }}
   }
   -- use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
   -- use "mhartington/oceanic-next" -- This is also a nice colorscheme. Just don't like that function names don't pop as much
 
   -- cmp plugins
   use {
-    "hrsh7th/nvim-cmp",                     -- The completion plugin
+    "hrsh7th/nvim-cmp",                                 -- The completion plugin
     config = function () require("user.cmp") end,
   }
-  use "hrsh7th/cmp-buffer"                  -- Buffer completions
-  use "hrsh7th/cmp-path"                    -- Path completions
-  use "hrsh7th/cmp-cmdline"                 -- Command line completions
-  use "hrsh7th/cmp-nvim-lua"                -- Neovim Lua runtime API
-  use "saadparwaiz1/cmp_luasnip"            -- Snippet completions
-  use "hrsh7th/cmp-nvim-lsp"                -- LSP completions
-  use "hrsh7th/cmp-nvim-lsp-signature-help" -- Signature help
+  use "hrsh7th/cmp-buffer"                              -- Buffer completions
+  use "hrsh7th/cmp-path"                                -- Path completions
+  use {
+    "hrsh7th/cmp-cmdline",                              -- Command line completions
+    commit = "e1ba818534a357b77494597469c85030c7233c16" -- https://github.com/hrsh7th/cmp-cmdline/issues/71
+  }
+  use "hrsh7th/cmp-nvim-lua"                            -- Neovim Lua runtime API
+  use "saadparwaiz1/cmp_luasnip"                        -- Snippet completions
+  use "hrsh7th/cmp-nvim-lsp"                            -- LSP completions
+  use "hrsh7th/cmp-nvim-lsp-signature-help"             -- Signature help
 
   -- snippets
   use "L3MON4D3/LuaSnip"             -- Snippet engine
@@ -127,7 +129,7 @@ return packer.startup(function(use)
   -- LSP
   use {
     "williamboman/nvim-lsp-installer", -- simple to use language server installer
-    requires = {{"neovim/nvim-lspconfig" }},
+    requires = {{ "neovim/nvim-lspconfig" }},
     config = function () require("user.lsp") end,
   }
   use "jose-elias-alvarez/typescript.nvim" -- LSP intgration for tsserver (javascript, typescript)
@@ -159,7 +161,8 @@ return packer.startup(function(use)
 
   -- Treesitter
   use {
-    "nvim-treesitter/nvim-treesitter", -- Syntax parsing for better code highlights, etc.
+    "windwp/nvim-ts-autotag",                            -- Complete SGML (XML, HTML, etc.) tags
+    requires = {{ "nvim-treesitter/nvim-treesitter" }},  -- Syntax parsing for better code highlights, etc.
     config = function () require("user.treesitter") end,
   }
   use "JoosepAlviste/nvim-ts-context-commentstring" -- Changes format of comments based on location within the file. Useful for JSX and svelte

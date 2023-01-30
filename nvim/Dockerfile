@@ -3,7 +3,8 @@
 #
 FROM --platform=linux/amd64 jllacuna/nvim AS cache
 FROM --platform=linux/amd64 golang:alpine AS golang
-FROM --platform=linux/amd64 alpine:3.16 AS base
+# glibc needed for tree-sitter-cli
+FROM --platform=linux/amd64 frolvlad/alpine-glibc:alpine-3.17 AS base
 
 # Install neovim with docs
 RUN apk add --no-cache \
@@ -30,19 +31,6 @@ RUN apk add --no-cache \
   ripgrep \
   fd \
   git
-
-# Install glibc for tree-sitter-cli
-ARG GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc
-ARG GLIBC_VERSION=2.30-r0
-
-RUN set -ex && \
-  apk add --no-cache --virtual .deps libstdc++ curl ca-certificates && \
-  for pkg in glibc-${GLIBC_VERSION} glibc-bin-${GLIBC_VERSION}; \
-      do curl -sSL ${GLIBC_REPO}/releases/download/${GLIBC_VERSION}/${pkg}.apk -o /tmp/${pkg}.apk; done && \
-  apk add --allow-untrusted /tmp/*.apk && \
-  rm -v /tmp/*.apk && \
-  /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib \
-  && apk del .deps
 
 # Folder for lsp servers
 ENV LSP_SERVERS=/usr/local/lib/lsp_servers
