@@ -4,7 +4,13 @@
 FROM --platform=linux/amd64 jllacuna/nvim AS cache
 FROM --platform=linux/amd64 golang:alpine AS golang
 # glibc needed for tree-sitter-cli
-FROM --platform=linux/amd64 frolvlad/alpine-glibc:alpine-3.17 AS base
+FROM --platform=linux/amd64 frolvlad/alpine-glibc:alpine-3.18 AS base
+
+ARG NVIM_CONFIG_PATH=/root/.config
+ARG GO_DIR=/usr/local/go
+ARG LSP_SERVERS=/usr/local/lib/lsp_servers
+ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
+ARG MASON_DIR=/usr/local/lib/mason
 
 # Install neovim with docs
 RUN apk add --no-cache \
@@ -22,9 +28,18 @@ RUN apk add --no-cache \
   ruby-dev
 
 # Install go
-ARG GO_DIR=/usr/local/go
 COPY --from=golang $GO_DIR $GO_DIR
 ENV PATH=$PATH:$GO_DIR/bin
+
+# Install rust and cargo
+RUN apk add --no-cache \
+  rust \
+  cargo
+
+# Install build tools
+RUN apk add --no-cache \
+  build-base \
+  curl
 
 # Install telescope dependencies
 RUN apk add --no-cache \
@@ -32,44 +47,20 @@ RUN apk add --no-cache \
   fd \
   git
 
-# Folder for lsp servers
-ENV LSP_SERVERS=/usr/local/lib/lsp_servers
-RUN mkdir -p $LSP_SERVERS
-
 # Install lua-language-server
-RUN apk add --no-cache --virtual .deps build-base bash ninja \
+# Mason install causes errors
+RUN apk add --no-cache --virtual .deps bash ninja linux-headers \
+  && mkdir -p $LSP_SERVERS \
   && cd $LSP_SERVERS \
-  && git clone --depth=1 https://github.com/sumneko/lua-language-server \
+  && git clone https://github.com/LuaLS/lua-language-server \
   && cd lua-language-server \
-  && git submodule update --depth 1 --init --recursive \
-  && cd 3rd/luamake \
-  && ./compile/install.sh \
-  && cd ../.. \
-  && ./3rd/luamake/luamake rebuild \
-  && ln -s ../lib/lsp_servers/lua-language-server/bin/lua-language-server /usr/local/bin \
+  && ./make.sh \
+  && ln -s "${LSP_SERVERS}/lua-language-server/bin/lua-language-server" /usr/local/bin \
   && apk del .deps
 
-# Install gopls (go language server)
-ENV PATH=$PATH:$LSP_SERVERS/go/bin
-RUN go install golang.org/x/tools/gopls@latest \
-  && mv /root/go $LSP_SERVERS
-
-# Install solargraph (ruby language server)
-RUN apk add --no-cache --virtual .deps build-base \
-  && gem install solargraph \
-  && apk del .deps
-
-# Install various language servers with node/npm
+# Install tree-sitter
 RUN npm install -g \
-  # Install html, css, json, eslint language servers 
-  vscode-langservers-extracted \
-  typescript typescript-language-server \
-  yaml-language-server \
-  dockerfile-language-server-nodejs \
-  svelte-language-server \
-  tree-sitter-cli \
-  @lifeart/ember-language-server \
-  pyright
+  tree-sitter-cli
 
 # Install glow from alpine/edge/testing
 # CLI Markdown reader
@@ -81,9 +72,6 @@ RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/te
 # Allows gopls to reference our imported modules
 ENV GOPATH=/workspace/go
 
-# Set XDG_CACHE_HOME for lewis6991/impatient.nvim plugin
-ENV XDG_CACHE_HOME=/usr/local/lib/xdg
-
 WORKDIR /data
 
 ENTRYPOINT [ "nvim" ]
@@ -93,21 +81,15 @@ ENTRYPOINT [ "nvim" ]
 #
 FROM base AS cached
 
-ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
-
-# Copy treesitter parsers from existing image to avoid their build time
+# Copy treesitter parsers and mason installs from existing image to avoid their build time
 COPY --from=cache $PARSER_DIR $PARSER_DIR
+COPY --from=cache $MASON_DIR $MASON_DIR
 
 # Copy neovim config to root home
-COPY config /root/.config
+COPY config $NVIM_CONFIG_PATH
 
-# Install plugins with packer.nvim
-RUN apk add --no-cache --virtual .deps build-base \
-  && nvim --headless -c 'autocmd User PackerComplete quitall' \
-  && apk del .deps
-
-# Prime plugin cache for lewis6991/impatient.nvim
-RUN nvim --headless -c 'quitall'
+# Install plugins with lazy.nvim
+RUN nvim --headless "+Lazy! sync" +qa
 
 #
 # Stage: not_cached
@@ -115,12 +97,23 @@ RUN nvim --headless -c 'quitall'
 FROM base AS not_cached
 
 # Copy neovim config to root home
-COPY config /root/.config
+COPY config $NVIM_CONFIG_PATH
 
-# Install plugins with packer.nvim
-RUN apk add --no-cache --virtual .deps build-base \
-  && nvim --headless -c 'autocmd User PackerComplete quitall' \
-  && apk del .deps
+# Install plugins with lazy.nvim
+RUN nvim --headless "+Lazy! sync" +qa
 
-# Prime plugin cache for lewis6991/impatient.nvim
-RUN nvim --headless -c 'quitall'
+# Install lsp servers with mason
+# Can list multiple servers with mason
+# This format makes it easy to comment out a server while still only generating one Docker layer
+# WARNING: Can run up to 10 +/-c commands
+RUN nvim --headless \
+  +"MasonInstall json-lsp css-lsp html-lsp" \
+  +"MasonInstall vtsls" \
+  +"MasonInstall yaml-language-server" \
+  +"MasonInstall dockerfile-language-server" \
+  +"MasonInstall svelte-language-server" \
+  +"MasonInstall gopls" \
+  +"MasonInstall pyright" \
+  +"MasonInstall solargraph" \
+  +"MasonInstall rnix-lsp" \
+  +qa

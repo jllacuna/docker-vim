@@ -1,8 +1,29 @@
-local status_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
-if not status_ok then
-  vim.notify "nvim-lsp-installer not found"
+local mason_lspconfig_status_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
+if not mason_lspconfig_status_ok then
+  vim.notify "mason-lspconfig not found"
   return
 end
+
+local servers = {
+  "jsonls",
+  "cssls",
+  "html",
+  "vtsls",
+  "yamlls",
+  "dockerls",
+  "svelte",
+  "gopls",
+  "pyright",
+  "solargraph",
+  "rnix",
+}
+
+mason_lspconfig.setup {
+  ensure_installed = servers,
+}
+
+-- Mason install of lua-language-server causes errors
+table.insert(servers, "lua_ls")
 
 local lsp_status_ok, lspconfig = pcall(require, "lspconfig")
 if not lsp_status_ok then
@@ -10,24 +31,7 @@ if not lsp_status_ok then
   return
 end
 
-local servers = {
-  "jsonls",
-  "sumneko_lua",
-  "cssls",
-  "html",
-  "tsserver",
-  "yamlls",
-  "dockerls",
-  "svelte",
-  "ember",
-  "gopls",
-  "pyright",
-  "solargraph",
-}
-
-lsp_installer.setup {
-  ensure_installed = servers
-}
+require("lspconfig.configs").vtsls = require("vtsls").lspconfig
 
 for _, server in pairs(servers) do
   local opts = {
@@ -39,13 +43,5 @@ for _, server in pairs(servers) do
     opts = vim.tbl_deep_extend("force", server_custom_opts, opts)
   end
 
-  if server == "tsserver" then
-    require("typescript").setup({
-      disable_commands = false, -- prevent the plugin from creating vim commands
-      debug = false,            -- enable debug logging for commands
-      server = opts,
-    })
-  else
-    lspconfig[server].setup(opts)
-  end
+  lspconfig[server].setup(opts)
 end

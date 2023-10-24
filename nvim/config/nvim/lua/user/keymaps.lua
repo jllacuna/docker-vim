@@ -107,6 +107,8 @@ keymap("n", "<leader>ft", "<cmd>TodoTelescope<cr>", merge({ desc = 'Find TODOs' 
 -- Bbye --
 keymap("n", "<leader>bd", "<cmd>Bdelete<cr>", merge({ desc = 'Delete buffer keep window' }, opts))
 
+keymap("n", "<leader>n", "<cmd>Navbuddy<cr>", merge({ desc = 'Navigate symbols' }, opts))
+
 -- Toggle line numbers
 keymap("n", "<leader>l", ":set nonumber!<CR>", merge({ desc = 'Toggle line numbers' }, opts))
 

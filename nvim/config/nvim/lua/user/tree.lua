@@ -7,7 +7,45 @@ end
 -- Following options are the default
 -- Each of these are documented in `:help nvim-tree.OPTION_NAME`
 nvim_tree.setup {
+  on_attach = function(bufnr)
+    local api = require('nvim-tree.api')
+
+    local function opts(desc)
+      return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    end
+
+    -- Start with the default mappings
+    api.config.mappings.default_on_attach(bufnr)
+
+    vim.keymap.set('n', 'o', api.node.open.edit, opts('Open')) -- default is <CR>
+    vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Close Directory')) -- default is <BS>
+    vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open: Vertical Split')) -- default is <C-v>
+    vim.keymap.set('n', 's', api.node.open.horizontal, opts('Open: Horizontal Split')) -- default is <C-x>
+    vim.keymap.set('n', 't', api.node.open.tab, opts('Open: New Tab')) -- default is <C-t>
+    vim.keymap.set('n', '<C-x>', api.fs.cut, opts('Cut')) -- default is x, <C-x> is default for split
+    vim.keymap.set('n', '<C-c>', api.fs.copy.node, opts('Copy')) -- default is c
+    vim.keymap.set('n', '<C-v>', api.fs.paste, opts('Paste')) -- default is p
+    vim.keymap.set('n', '<C-d>', api.fs.remove, opts('Delete')) -- default is d, will prompt for confirmation
+
+
+    vim.keymap.del('n', 'x', { buffer = bufnr }) -- default is cut, replaced by <C-x>
+    vim.keymap.del('n', 'c', { buffer = bufnr }) -- default is copy, replaced by <C-c>
+    vim.keymap.del('n', 'p', { buffer = bufnr }) -- default is paste, replaced by <C-y>
+    vim.keymap.del('n', 'd', { buffer = bufnr }) -- default is delete, replaced by <C-d>
+
+    vim.keymap.del('n', 'gy', { buffer = bufnr }) -- default is copy_absolute_path, not relevant in docker
+    vim.keymap.del('n', 'D', { buffer = bufnr }) -- default is trash, not relevant in docker
+
+    -- Remove keys that change the root
+    vim.keymap.del('n', '<C-]>', { buffer = bufnr }) -- default is cd
+    vim.keymap.del('n', '-', { buffer = bufnr }) -- default is up (change root to parent)
+
+    -- Disable mouse actions
+    vim.keymap.del('n', '<2-LeftMouse>', { buffer = bufnr }) -- default is edit/open
+    vim.keymap.del('n', '<2-RightMouse>', { buffer = bufnr }) -- default is cd
+  end,
   renderer = {
+    root_folder_label = false,
     icons = {
       glyphs = {
         default = "",
@@ -33,12 +71,6 @@ nvim_tree.setup {
   },
   disable_netrw = true,
   hijack_netrw = false,  -- default
-  open_on_setup = false, -- default
-  ignore_ft_on_setup = { -- not relevant if open_on_setup = false
-    -- "startify",
-    -- "dashboard",
-    -- "alpha",
-  },
   open_on_tab = false,
   hijack_cursor = true, -- default false, keeps cursor on first letter of filename
   update_cwd = false,   -- default
@@ -75,45 +107,7 @@ nvim_tree.setup {
   view = {
     width = 30, -- default
     adaptive_size = true,
-    hide_root_folder = true,
     side = "left",
-    mappings = {
-      custom_only = false,
-      list = {
-        { key = { "<CR>", "o" },  action = "edit" },              -- default
-        { key = "<Tab>",          action = "preview" },           -- default
-        { key = "f",              action = "live_filter" },       -- default
-        { key = "F",              action = "clear_live_filter" }, -- default
-        { key = "E",              action = "expand_all" },        -- default
-        { key = "W",              action = "collapse_all" },      -- default
-        { key = "<C-k>",          action = "toggle_file_info" },  -- default
-        { key = "g?",             action = "toggle_help" },       -- default
-        { key = "y",              action = "copy_name" },         -- default
-        { key = "Y",              action = "copy_path" },         -- default
-        { key = "P",              action = "parent_node" },       -- default
-        { key = "R",              action = "refresh" },           -- default
-        { key = "h",              action = "close_node" },        -- default is <BS>
-        { key = "v",              action = "vsplit" },            -- default is <C-v>
-        { key = "s",              action = "split" },             -- default is <C-x>, s is default for system_open
-        { key = "t",              action = "tabnew" },            -- default is <C-t>
-        { key = "<C-x>",          action = "cut" },               -- default is x, <C-x> is default for split
-        { key = "x",              action = "" },                  -- default is cut
-        { key = "<C-c>",          action = "copy" },              -- default is c
-        { key = "c",              action = "" },                  -- default is copy
-        { key = "<C-v>",          action = "paste" },             -- default is p
-        { key = "p",              action = "" },                  -- default is paste
-        { key = "a",              action = "create" },            -- default
-        { key = "r",              action = "rename" },            -- default
-        { key = "<C-d>",          action = "remove" },            -- default is d, will prompt for confirmation
-        { key = "d",              action = "" },                  -- default is remove
-        { key = "gy",             action = "" },                  -- default is copy_absolute_path
-        { key = "D",              action = "" },                  -- default is trash
-        { key = "<C-]>",          action = "" },                  -- default is cd
-        { key = "-",              action = "" },                  -- default is dir_up
-        { key = "<2-LeftMouse>",  action = "" },                  -- disable mouse clicks, default is edit
-        { key = "<2-RightMouse>", action = "" },                  -- disable mouse clicks, default is cd
-      },
-    },
     number = false,
     relativenumber = false,
   },

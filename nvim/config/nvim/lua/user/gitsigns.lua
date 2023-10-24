@@ -34,8 +34,8 @@ gitsigns.setup {
     map('n', '<leader>hS', gs.stage_buffer, { desc = '[git] Stage buffer' })
     map('n', '<leader>hR', gs.reset_buffer, { desc = '[git] Reset buffer' })
     map('n', '<leader>hp', gs.preview_hunk, { desc = '[git] Preview hunk' })
-    map('n', '<leader>hb', function() gs.blame_line{full=true} end, { desc = '[git] Blame line' })
-    map('n', '<leader>hB', gs.toggle_current_line_blame, { desc = '[git] Toggle blame current line' })
+    map('n', '<leader>hB', function() gs.blame_line{full=true} end, { desc = '[git] Blame line' })
+    map('n', '<leader>hb', gs.toggle_current_line_blame, { desc = '[git] Toggle blame current line' })
     map('n', '<leader>hd', gs.diffthis, { desc = '[git] Diff unstaged' })
     map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = '[git] Diff last commit'})
     map('n', '<leader>ht', function() gs.toggle_word_diff(); gs.toggle_deleted() end, { desc = '[git] Toggle inline diff' })
@@ -43,13 +43,6 @@ gitsigns.setup {
     -- Text object
     map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = '[git] inner hunk' })
   end,
-  signs = {
-    add =          { hl = "GitSignsAdd",    text = "▎",  numhl = "GitSignsAddNr",    linehl = "GitSignsAddLn" },
-    change =       { hl = "GitSignsChange", text = "▎",  numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-    delete =       { hl = "GitSignsDelete", text = "契", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-    topdelete =    { hl = "GitSignsDelete", text = "契", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-    changedelete = { hl = "GitSignsChange", text = "▎",  numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-  },
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
   numhl = true,      -- Toggle with `:Gitsigns toggle_numhl`
   linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`

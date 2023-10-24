@@ -5,7 +5,9 @@ if not status_ok then
 end
 
 navic.setup {
+  lsp = {
+    auto_attach = true,
+  },
   highlight = true,
   separator = "  ",
 }
-

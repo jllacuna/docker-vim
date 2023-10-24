@@ -1,0 +1,96 @@
+#
+# Stage: base
+#
+FROM --platform=linux/amd64 jllacuna/nvim AS cache
+FROM --platform=linux/amd64 nixos/nix as base
+
+ARG NVIM_CONFIG_PATH=/root/.config
+ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
+ARG MASON_DIR=/usr/local/lib/mason
+
+RUN nix-channel --update
+
+# Install neovim
+RUN nix-env --install --attr \
+  nixpkgs.neovim
+
+# Install nodejs, ruby, go, rust w/ cargo
+RUN nix-env --install --attr \
+  nixpkgs.nodejs_20 \
+  nixpkgs.ruby_3_2 \
+  nixpkgs.go \
+  nixpkgs.rustc \
+  nixpkgs.cargo
+
+# Install build tools
+RUN nix-env --install --attr \
+  nixpkgs.gcc_multi \
+  nixpkgs.gnumake
+
+# Install telescope dependencies
+RUN nix-env --install --attr \
+  nixpkgs.ripgrep \
+  nixpkgs.fd \
+  nixpkgs.git
+
+# language servers
+# Having trouble installing luag-language-server with mason on this platform
+# Install with nix
+RUN nix-env --install --attr \
+  nixpkgs.lua-language-server
+
+# tree-sitter
+RUN nix-env --install --attr \
+  nixpkgs.tree-sitter
+
+# Markdown renderer
+RUN nix-env --install --attr \
+  nixpkgs.glow
+
+ENV GOPATH=/workspace/go
+
+WORKDIR /data
+
+ENTRYPOINT [ "nvim" ]
+
+#
+# Stage: cached
+#
+FROM base AS cached
+
+# Copy treesitter parsers and mason installs from existing image to avoid their build time
+COPY --from=cache $PARSER_DIR $PARSER_DIR
+COPY --from=cache $MASON_DIR $MASON_DIR
+
+# Copy neovim config to root home
+COPY config $NVIM_CONFIG_PATH
+
+# Install plugins with lazy.nvim
+RUN nvim --headless "+Lazy! sync" +qa
+
+#
+# Stage: not_cached
+#
+FROM base AS not_cached
+
+# Copy neovim config to root home
+COPY config $NVIM_CONFIG_PATH
+
+# Install plugins with lazy.nvim
+RUN nvim --headless "+Lazy! sync" +qa
+
+# Install lsp servers with mason
+# Can list multiple servers with Mason
+# This format makes it easy to comment out a server while still only generating one Docker layer
+# WARNING: Can run up to 10 +/-c commands
+RUN nvim --headless \
+  +"MasonInstall json-lsp css-lsp html-lsp" \
+  +"MasonInstall vtsls" \
+  +"MasonInstall yaml-language-server" \
+  +"MasonInstall dockerfile-language-server" \
+  +"MasonInstall svelte-language-server" \
+  +"MasonInstall gopls" \
+  +"MasonInstall pyright" \
+  +"MasonInstall solargraph" \
+  +"MasonInstall rnix-lsp" \
+  +qa

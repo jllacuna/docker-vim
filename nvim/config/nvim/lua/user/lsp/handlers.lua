@@ -68,13 +68,19 @@ local function lsp_highlight_document(client)
   illuminate.on_attach(client)
 end
 
-local function lsp_navic(client, bufnr)
-  local status_ok, navic = pcall(require, "nvim-navic")
-  if not status_ok then
-    vim.notify "nvim-navic not found"
-    return
+-- Fix issue with file watching in neovim 0.9 on MacOS
+-- Supposedly fixed in neovim 0.10 nightly build: https://github.com/sveltejs/language-tools/issues/2008#issuecomment-1601834438
+-- Original fix: https://github.com/sveltejs/language-tools/issues/2008#issuecomment-1539788464
+-- Variation fix: https://github.com/neovim/nvim-lspconfig/issues/725#issuecomment-1539822348
+local function lsp_svelte(client)
+  if client.name == "svelte" then
+    vim.api.nvim_create_autocmd("BufWritePost", {
+      pattern = { "*.js", "*.ts" },
+      callback = function(ctx)
+        client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.file })
+      end,
+    })
   end
-  navic.attach(client, bufnr)
 end
 
 local function lsp_keymaps(bufnr)
@@ -97,7 +103,7 @@ end
 M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
   lsp_highlight_document(client)
-  lsp_navic(client, bufnr)
+  lsp_svelte(client)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

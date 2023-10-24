@@ -1,0 +1,20 @@
+Jump to definition           | gd
+Find references              | gr
+Show type under cursor       | K
+Show diagnostic under cursor | gl
+Next diagnostic              | ]d
+Previous diagnostic          | [d
+Toggle blame current line    | <leader>hb
+Next git hunk                | ]c
+Previous git hunk            | [c
+Navigate symbols             | <leader>n
+Rename variable              | <leader>rn
+Show code action             | <leader>ca
+Preview Markdown             | <leader>m
+Find files                   | <leader>ff
+Live grep                    | <leader>fg
+Find help tags               | <leader>fh
+Find TODOs                   | <leader>ft
+Find diagnostics             | <leader>fd
+Find word under cursor       | <leader>fw
+Close buffer (keep window)   | <leader>bd

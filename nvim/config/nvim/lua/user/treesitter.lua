@@ -12,15 +12,12 @@ configs.setup {
   parser_install_dir = "/usr/local/lib/treesitter_parsers",
 
   ensure_installed = {
-    "astro", "bash", "c", "c_sharp", "cmake", "comment", "cpp", "css", "dart",
-    "dockerfile", "eex", "elixir", "elm", "embedded_template", "erlang",
-    "fish", "glimmer", "go", "gomod", "gowork", "graphql", "hack", "haskell",
-    "hcl", "heex", "help", "html", "http", "java", "javascript", "jsdoc",
-    "json", "jsonc", "julia", "kotlin", "lalrpop", "latex", "lua", "make",
-    "ninja", "ocaml", "ocamllex", "perl", "php", "pioasm", "proto", "pug",
-    "python", "ql", "r", "regex", "ruby", "rust", "scala", "scss", "sparql",
-    "surface", "svelte", "swift", "todotxt", "toml", "turtle", "typescript",
-    "v", "vim", "vue", "yaml"
+    "bash", "c_sharp", "cmake", "comment", "css", "dart", "dockerfile", "eex",
+    "elixir", "erlang", "go", "gomod", "gowork", "graphql", "haskell", "html",
+    "http", "java", "javascript", "jsdoc", "json", "kotlin", "lua", "make",
+    "ninja", "nix", "perl", "php", "proto", "python", "r", "regex", "ruby",
+    "rust", "scala", "scss", "svelte", "swift", "toml", "typescript", "vim",
+    "vue", "yaml"
   }, -- one of "all" (not recommended), or a list of languages
 
   -- WARNING: Leave sync_install to true so that Docker will compile the parsers into the image on build
@@ -48,10 +45,6 @@ configs.setup {
     --   node_decremental = "grm",
     -- },
   },
-  context_commentstring = {
-    enable = true,
-    enable_autocmd = false, -- For Comment.nvim
-  },
   autotag = {
     enable = true,
   },
@@ -74,3 +67,11 @@ configs.setup {
     },
   },
 }
+
+local comment_status_ok, commentstring = pcall(require, "ts_context_commentstring")
+if not comment_status_ok then
+  vim.notify "nvim-ts-context-commentstring not found"
+  return
+end
+
+commentstring.setup {}

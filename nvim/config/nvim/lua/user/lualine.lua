@@ -10,14 +10,65 @@ if not navic_status_ok then
   return
 end
 
+local jellybeans_status_ok, jellybeans = pcall(require, "lualine.themes.jellybeans")
+if not jellybeans_status_ok then
+  vim.notify "lualine.themes.jellybeans not found"
+  return
+end
+
+-- Display relative path of node under cursor in NvimTree
+local nvim_tree_extension = {
+  sections = {
+    lualine_b = {
+      function()
+        local status_ok, nvim_tree_api = pcall(require, "nvim-tree.api")
+        if not status_ok then
+          vim.notify "nvim-tree.api not found"
+          return ''
+        end
+        local node = nvim_tree_api.tree.get_node_under_cursor()
+        return vim.fn.fnamemodify(node.absolute_path, ":~:.")
+      end
+    },
+  },
+  filetypes = { "NvimTree"}
+}
+
 lualine.setup {
   options = {
-    disabled_filetypes = { 'NvimTree' },
+    disabled_filetypes = {
+      winbar = {
+        "NvimTree",
+      },
+    },
+    theme = jellybeans,
   },
-  sections = {
+
+  extensions = {
+    nvim_tree_extension,
+  },
+
+  tabline = {
+    lualine_a = { "buffers" },
+    lualine_z = { "tabs" },
+  },
+
+  winbar = {
+    lualine_b = {
+      {
+        "filetype",
+        icon_only = true,
+      },
+    },
     lualine_c = {
-      "filename",
-      { navic.get_location, cond = navic.is_available },
+      {
+        function()
+          return navic.get_location()
+        end,
+        cond = function()
+          return navic.is_available()
+        end
+      },
     },
   },
 }

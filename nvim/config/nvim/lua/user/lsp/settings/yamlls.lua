@@ -1,12 +1,14 @@
-local schemas = {
-  ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "docker-compose*.yml",
-  ["https://json.schemastore.org/kustomization.json"] = "kustomization.yaml",
-}
-
 local opts = {
   settings = {
+    schemaStore = {
+      -- You must disable built-in schemaStore support if you want to use
+      -- b0o/schemastore.nvim plugin and its advanced options like `ignore`.
+      enable = false,
+      -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+      url = "",
+    },
     yaml = {
-      schemas = schemas,
+      schemas = require('schemastore').yaml.schemas(),
     },
   },
 }
