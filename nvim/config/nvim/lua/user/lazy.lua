@@ -211,6 +211,19 @@ lazy.setup {
     config = function () require("user.telescope") end,
   },
 
+  -- UI hooks
+  { "stevearc/dressing.nvim" },
+
+  -- Rename symbol with previews
+  {
+    "smjonas/inc-rename.nvim",
+    config = function()
+      require("inc_rename").setup {
+        input_buffer_type = "dressing",
+      }
+    end,
+  },
+
   -- Displays a cheatsheet of commands, keymaps, nerd font icons, etc. in telescope
   {
     "sudormrfbin/cheatsheet.nvim",

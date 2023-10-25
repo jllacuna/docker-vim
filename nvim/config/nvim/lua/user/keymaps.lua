@@ -83,16 +83,21 @@ keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", merge({ desc = 'Find buf
 keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", merge({ desc = 'Find help tags' }, opts))
 keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", merge({ desc = 'Find diagnostics' }, opts))
 keymap("n", "<leader>fc", "<cmd>Telescope git_status<cr>", merge({ desc = 'Find changes (git)' }, opts))
-vim.keymap.set('n', '<leader>fw', function()
-  local word = vim.call('expand', '<cword>');
-  local status_ok, tb = pcall(require, 'telescope.builtin')
+vim.keymap.set("n", "<leader>fw", function()
+  local word = vim.fn.expand("<cword>");
+  local status_ok, tb = pcall(require, "telescope.builtin")
   if status_ok then
     tb.live_grep { default_text = word }
   end
-end, { desc = 'Find word under cursor' })
+end, { desc = "Find word under cursor" })
 
 -- Cheatsheet --
 keymap("n", "<leader>cs", "<cmd>Cheatsheet<cr>", opts)
+
+-- inc-rename --
+vim.keymap.set("n", "<leader>rn", function()
+  return ":IncRename " .. vim.fn.expand("<cword>")
+end, { desc = 'Rename symbol', expr = true })
 
 -- Treesitter Playground --
 keymap("n", "<leader>s", "<cmd>TSHighlightCapturesUnderCursor<cr>", merge({ desc = 'Show syntax highlight groups' }, opts))

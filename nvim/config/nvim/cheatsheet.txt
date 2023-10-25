@@ -8,7 +8,7 @@ Toggle blame current line    | <leader>hb
 Next git hunk                | ]c
 Previous git hunk            | [c
 Navigate symbols             | <leader>n
-Rename variable              | <leader>rn
+Rename symbol                | <leader>rn
 Show code action             | <leader>ca
 Preview Markdown             | <leader>m
 Find files                   | <leader>ff
