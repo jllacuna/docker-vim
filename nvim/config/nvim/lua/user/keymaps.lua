@@ -82,6 +82,7 @@ keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", merge({ desc = 'Search
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", merge({ desc = 'Find buffers' }, opts))
 keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", merge({ desc = 'Find help tags' }, opts))
 keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", merge({ desc = 'Find diagnostics' }, opts))
+keymap("n", "<leader>fc", "<cmd>Telescope git_status<cr>", merge({ desc = 'Find changes (git)' }, opts))
 vim.keymap.set('n', '<leader>fw', function()
   local word = vim.call('expand', '<cword>');
   local status_ok, tb = pcall(require, 'telescope.builtin')

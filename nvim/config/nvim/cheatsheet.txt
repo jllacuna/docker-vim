@@ -16,5 +16,6 @@ Live grep                    | <leader>fg
 Find help tags               | <leader>fh
 Find TODOs                   | <leader>ft
 Find diagnostics             | <leader>fd
+Find changes (git)           | <leader>fc
 Find word under cursor       | <leader>fw
 Close buffer (keep window)   | <leader>bd
