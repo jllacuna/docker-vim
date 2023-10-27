@@ -71,4 +71,14 @@ lualine.setup {
       },
     },
   },
+
+  inactive_winbar = {
+    lualine_b = {
+      {
+        "filetype",
+        icon_only = true,
+      },
+      "filename",
+    },
+  }
 }
