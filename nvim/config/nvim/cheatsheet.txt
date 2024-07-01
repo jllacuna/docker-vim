@@ -7,7 +7,7 @@ Previous diagnostic          | [d
 Toggle blame current line    | <leader>hb
 Next git hunk                | ]c
 Previous git hunk            | [c
-Navigate symbols             | <leader>n
+Toggle symbol outline        | <leader>o
 Rename symbol                | <leader>rn
 Show code action             | <leader>ca
 Preview Markdown             | <leader>m

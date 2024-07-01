@@ -113,8 +113,8 @@ keymap("n", "<leader>ft", "<cmd>TodoTelescope<cr>", merge({ desc = 'Find TODOs' 
 -- Bbye --
 keymap("n", "<leader>bd", "<cmd>Bdelete<cr>", merge({ desc = 'Delete buffer keep window' }, opts))
 
--- Navbuddy --
-keymap("n", "<leader>n", "<cmd>Navbuddy<cr>", merge({ desc = 'Navigate symbols' }, opts))
+-- outline.nvim --
+keymap("n", "<leader>o", "<cmd>Outline<cr>", merge({ desc = 'Toggle symbol outline' }, opts))
 
 -- Toggle line numbers
 keymap("n", "<leader>l", ":set nonumber!<CR>", merge({ desc = 'Toggle line numbers' }, opts))
