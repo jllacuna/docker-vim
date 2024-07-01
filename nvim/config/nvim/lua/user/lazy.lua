@@ -183,16 +183,11 @@ lazy.setup {
 
   -- Navigate symbols
   {
-    "SmiteshP/nvim-navbuddy",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "SmiteshP/nvim-navic",
-      "MunifTanjim/nui.nvim",
-    },
-    opts = {
-      lsp = {
-        auto_attach = true,
-      },
+    "hedyhli/outline.nvim",
+    lazy = true,
+    cmd = { "Outline", "OutlineOpen" },
+    keys = { -- Example mapping to toggle outline
+      { "<leader>o", "<cmd>Outline<CR>", desc = "Toggle outline" },
     },
   },
 
