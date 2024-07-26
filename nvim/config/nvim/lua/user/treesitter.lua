@@ -16,7 +16,7 @@ configs.setup {
     "elixir", "erlang", "go", "gomod", "gowork", "graphql", "haskell", "html",
     "http", "java", "javascript", "jsdoc", "json", "kotlin", "lua", "make",
     "ninja", "nix", "perl", "php", "proto", "python", "r", "regex", "ruby",
-    "rust", "scala", "scss", "svelte", "swift", "toml", "typescript", "vim",
+    "rust", "scala", "scss", "svelte", "toml", "typescript", "vim",
     "vue", "yaml"
   }, -- one of "all" (not recommended), or a list of languages
 

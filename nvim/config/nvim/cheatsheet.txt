@@ -18,4 +18,5 @@ Find TODOs                   | <leader>ft
 Find diagnostics             | <leader>fd
 Find changes (git)           | <leader>fc
 Find word under cursor       | <leader>fw
+Search and insert Nerd fonts | <leader>fn
 Close buffer (keep window)   | <leader>bd

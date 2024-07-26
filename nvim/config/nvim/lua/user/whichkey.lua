@@ -5,9 +5,10 @@ if not status_ok then
 end
 
 which_key.setup {
-  triggers_blacklist = {
-    n = {
-      "o", "O", -- Messes with our "oo" and "OO" keymaps to add a line without going into insert mode
-    },
-  },
+  defer = function(ctx)
+    -- Messes with our "oo" and "OO" keymaps to add a line without going into insert mode
+    if vim.list_contains({ "o", "O" }, ctx.operator) then
+      return true
+    end
+  end,
 }

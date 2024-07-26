@@ -4,7 +4,7 @@
 FROM --platform=linux/amd64 jllacuna/nvim AS cache
 FROM --platform=linux/amd64 golang:alpine AS golang
 # glibc needed for tree-sitter-cli
-FROM --platform=linux/amd64 frolvlad/alpine-glibc:alpine-3.18 AS base
+FROM --platform=linux/amd64 frolvlad/alpine-glibc:alpine-3.19 AS base
 
 ARG NVIM_CONFIG_PATH=/root/.config
 ARG GO_DIR=/usr/local/go

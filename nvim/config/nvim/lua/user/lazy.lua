@@ -223,9 +223,9 @@ lazy.setup {
     config = function () require("user.cheatsheet") end,
   },
 
-  -- Treesitter
+  -- Treesitter: Syntax parsing for better code highlights, etc.
   {
-    "nvim-treesitter/nvim-treesitter",              -- Syntax parsing for better code highlights, etc.
+    "nvim-treesitter/nvim-treesitter",
     dependencies = {
       -- Complete SGML (XML, HTML, etc.) tags ]]
       "windwp/nvim-ts-autotag",
@@ -245,6 +245,16 @@ lazy.setup {
     config = function () require("user.gitsigns") end,
   },
 
-  -- Coffeescript
-  { "kchmck/vim-coffee-script" } -- Support for coffeescript syntax highlighting, etc.
+  -- Coffeescript syntax highlighting, etc.
+  { "kchmck/vim-coffee-script" },
+
+  -- Search and insert Nerd fonts
+  {
+    '2kabhishek/nerdy.nvim',
+    dependencies = {
+      'stevearc/dressing.nvim',
+      'nvim-telescope/telescope.nvim',
+    },
+    cmd = 'Nerdy',
+  },
 }
