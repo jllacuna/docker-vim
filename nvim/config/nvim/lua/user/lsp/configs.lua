@@ -5,25 +5,23 @@ if not mason_lspconfig_status_ok then
 end
 
 local servers = {
-  "jsonls",
   "cssls",
+  "dockerls",
+  "gopls",
   "html",
+  "jsonls",
+  "lua_ls",
+  "pyright",
+  "rnix",
+  "solargraph",
+  "svelte",
   "vtsls",
   "yamlls",
-  "dockerls",
-  "svelte",
-  "gopls",
-  "pyright",
-  "solargraph",
-  "rnix",
 }
 
 mason_lspconfig.setup {
   ensure_installed = servers,
 }
-
--- Mason install of lua-language-server causes errors
-table.insert(servers, "lua_ls")
 
 local lsp_status_ok, lspconfig = pcall(require, "lspconfig")
 if not lsp_status_ok then
