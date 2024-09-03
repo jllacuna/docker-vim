@@ -5,16 +5,20 @@ if not mason_lspconfig_status_ok then
 end
 
 local servers = {
+  "bashls",
   "cssls",
   "dockerls",
+  "docker_compose_language_service",
   "gopls",
   "html",
   "jsonls",
   "lua_ls",
+  "marksman",
   "pyright",
   "rnix",
   "solargraph",
   "svelte",
+  "taplo",
   "vtsls",
   "yamlls",
 }
