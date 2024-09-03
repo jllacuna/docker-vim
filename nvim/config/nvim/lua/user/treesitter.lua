@@ -4,7 +4,13 @@ if not status_ok then
   return
 end
 
+-- Store treesitter parsers in a separate folder so that we can cache them when building docker
+vim.opt.runtimepath:append("/usr/local/lib/treesitter_parsers")
+
 configs.setup {
+  -- Tell plugin where we put the parsers
+  parser_install_dir = "/usr/local/lib/treesitter_parsers",
+
   ensure_installed = {
     "bash",
     -- "c_sharp",
@@ -61,9 +67,11 @@ configs.setup {
     "yaml"
   }, -- one of "all" (not recommended), or a list of languages
 
+  -- WARNING: Leave sync_install to true so that Docker will compile the parsers into the image on build
+  sync_install = true, -- install languages synchronously (only applied to `ensure_installed`)
+
   modules = {},
   auto_install = true,
-  sync_install = false,
   ignore_install = {}, -- List of parsers to ignore installing
 
   autopairs = {

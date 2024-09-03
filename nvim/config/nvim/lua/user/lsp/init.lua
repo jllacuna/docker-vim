@@ -5,6 +5,8 @@ if not mason_status_ok then
 end
 
 mason.setup {
+  -- Store mason installs in a separate folder so that we can cache them when building docker
+  install_root_dir = "/usr/local/lib/mason",
   ui ={
     icons = {
       package_installed = "",

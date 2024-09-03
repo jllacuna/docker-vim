@@ -32,12 +32,17 @@ nvim_tree.setup {
     vim.keymap.set('n', '<C-c>', api.fs.copy.node, opts('Copy')) -- default is c
     vim.keymap.set('n', '<C-v>', api.fs.paste, opts('Paste')) -- default is p
     vim.keymap.set('n', '<C-d>', api.fs.remove, opts('Delete')) -- default is d, will prompt for confirmation
-    vim.keymap.set('n', '<C-t>', api.fs.trash, opts('Trash')) -- default is D, will prompt for confirmation
 
     vim.keymap.del('n', 'x', { buffer = bufnr }) -- default is cut, replaced by <C-x>
     vim.keymap.del('n', 'c', { buffer = bufnr }) -- default is copy, replaced by <C-c>
     vim.keymap.del('n', 'd', { buffer = bufnr }) -- default is delete, replaced by <C-d>
-    vim.keymap.del('n', 'D', { buffer = bufnr }) -- default is trash, replaced by <C-t>
+
+    vim.keymap.del('n', 'gy', { buffer = bufnr }) -- default is copy_absolute_path, not relevant in docker
+    vim.keymap.del('n', 'D', { buffer = bufnr }) -- default is trash, not relevant in docker
+
+    -- Remove keys that change the root
+    vim.keymap.del('n', '<C-]>', { buffer = bufnr }) -- default is cd
+    vim.keymap.del('n', '-', { buffer = bufnr }) -- default is up (change root to parent)
 
     -- Disable mouse actions
     vim.keymap.del('n', '<2-LeftMouse>', { buffer = bufnr }) -- default is edit/open

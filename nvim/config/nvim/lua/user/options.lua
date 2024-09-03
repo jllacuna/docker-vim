@@ -10,11 +10,11 @@ local options = {
   hlsearch       = true,                                 -- highlight all matches on previous search pattern
   ignorecase     = true,                                 -- ignore case in search patterns
   inccommand     = "split",                              -- show results of rename in a split
-  mouse          = "nvi",                                -- allow the mouse to be used in neovim
+  mouse          = "nv",                                 -- allow the mouse to be used in neovim
   mousehide      = true,                                 -- hide mouse when typing
   mousemodel     = "popup_setpos",                       -- specify mouse behavior
   number         = true,                                 -- set numbered lines
-  numberwidth    = 1,                                    -- set minimum number column width (including space before code) { default 4 }
+  numberwidth    = 4,                                    -- set minimum number column width (including space before code) { default 4 }
   pumheight      = 0,                                    -- pop up menu height. 0 => use available screen space
   regexpengine   = 0,                                    -- automatically select regular expression engine
   relativenumber = false,                                -- set relative numbered lines
