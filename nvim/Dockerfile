@@ -4,7 +4,7 @@
 FROM --platform=linux/amd64 jllacuna/nvim AS cache
 FROM --platform=linux/amd64 golang:alpine AS golang
 # glibc needed for tree-sitter-cli
-FROM --platform=linux/amd64 frolvlad/alpine-glibc:alpine-3.19 AS base
+FROM --platform=linux/amd64 frolvlad/alpine-glibc:alpine-3.20 AS base
 
 ARG NVIM_CONFIG_PATH=/root/.config
 ARG GO_DIR=/usr/local/go
@@ -46,17 +46,6 @@ RUN apk add --no-cache \
   ripgrep \
   fd \
   git
-
-# Install lua-language-server
-# Mason install causes errors
-RUN apk add --no-cache --virtual .deps bash ninja linux-headers \
-  && mkdir -p $LSP_SERVERS \
-  && cd $LSP_SERVERS \
-  && git clone https://github.com/LuaLS/lua-language-server \
-  && cd lua-language-server \
-  && ./make.sh \
-  && ln -s "${LSP_SERVERS}/lua-language-server/bin/lua-language-server" /usr/local/bin \
-  && apk del .deps
 
 # Install tree-sitter
 RUN npm install -g \
