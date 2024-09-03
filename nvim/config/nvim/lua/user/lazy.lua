@@ -18,7 +18,7 @@ if not status_ok then
   return
 end
 
-lazy.setup {
+lazy.setup({
 
   -- Useful lua functions used by lots of plugins
   { "nvim-lua/plenary.nvim" },
@@ -320,4 +320,4 @@ lazy.setup {
     -- See also https://lazy.folke.io/packages
     hererocks = false,
   },
-}
+})
