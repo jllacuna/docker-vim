@@ -4,6 +4,12 @@ if not status_ok then
   return
 end
 
+local preview_ok, preview = pcall(require, "nvim-tree-preview")
+if not preview_ok then
+  vim.notify "nvim-tree-preview not found"
+  return
+end
+
 -- Following options are the default
 -- Each of these are documented in `:help nvim-tree.OPTION_NAME`
 nvim_tree.setup {
@@ -26,23 +32,36 @@ nvim_tree.setup {
     vim.keymap.set('n', '<C-c>', api.fs.copy.node, opts('Copy')) -- default is c
     vim.keymap.set('n', '<C-v>', api.fs.paste, opts('Paste')) -- default is p
     vim.keymap.set('n', '<C-d>', api.fs.remove, opts('Delete')) -- default is d, will prompt for confirmation
-
+    vim.keymap.set('n', '<C-t>', api.fs.trash, opts('Trash')) -- default is D, will prompt for confirmation
 
     vim.keymap.del('n', 'x', { buffer = bufnr }) -- default is cut, replaced by <C-x>
     vim.keymap.del('n', 'c', { buffer = bufnr }) -- default is copy, replaced by <C-c>
-    vim.keymap.del('n', 'p', { buffer = bufnr }) -- default is paste, replaced by <C-y>
     vim.keymap.del('n', 'd', { buffer = bufnr }) -- default is delete, replaced by <C-d>
-
-    vim.keymap.del('n', 'gy', { buffer = bufnr }) -- default is copy_absolute_path, not relevant in docker
-    vim.keymap.del('n', 'D', { buffer = bufnr }) -- default is trash, not relevant in docker
-
-    -- Remove keys that change the root
-    vim.keymap.del('n', '<C-]>', { buffer = bufnr }) -- default is cd
-    vim.keymap.del('n', '-', { buffer = bufnr }) -- default is up (change root to parent)
+    vim.keymap.del('n', 'D', { buffer = bufnr }) -- default is trash, replaced by <C-t>
 
     -- Disable mouse actions
     vim.keymap.del('n', '<2-LeftMouse>', { buffer = bufnr }) -- default is edit/open
     vim.keymap.del('n', '<2-RightMouse>', { buffer = bufnr }) -- default is cd
+
+    -- Preview
+    vim.keymap.set('n', 'p', function() -- default is paste, replaced by <C-v>
+      if preview.is_open() or preview.is_watching() then
+        preview.unwatch() -- Also closes preview window by default
+      else
+        preview.watch()
+      end
+    end, opts('Toggle Preview'))
+
+    vim.keymap.set('n', '<Tab>', function()
+      local ok, node = pcall(api.tree.get_node_under_cursor)
+      if ok and node then
+        if node.type == 'directory' then
+          api.node.open.edit()
+        else
+          preview.node(node, { toggle_focus = true })
+        end
+      end
+    end, opts('Preview'))
   end,
   renderer = {
     root_folder_label = false,
@@ -72,7 +91,7 @@ nvim_tree.setup {
   disable_netrw = true,
   hijack_netrw = false,  -- default
   open_on_tab = false,
-  hijack_cursor = true, -- default false, keeps cursor on first letter of filename
+  hijack_cursor = true, -- default false, when true, keeps cursor on first letter of filename
   update_cwd = false,   -- default
   diagnostics = {
     enable = true,
@@ -84,8 +103,8 @@ nvim_tree.setup {
     },
   },
   update_focused_file = {
-    enable = true,
-    update_root = false,
+    enable = true, -- update the focused file in nvim-tree to match buffer
+    update_root = false, -- do not change root if opening a file outside the current root
     ignore_list = {}, -- default
   },
   system_open = {
@@ -93,15 +112,15 @@ nvim_tree.setup {
     args = {}, -- default
   },
   filters = {
-    dotfiles = false,
+    dotfiles = false, -- do not show hidden dot files
     custom = {
       "^\\.git",
       "^node_modules",
     },
   },
   git = {
-    enable = true,
-    ignore = true,
+    enable = true, -- highlight git attributes
+    ignore = true, -- hide files in .gitignore
     timeout = 1000, -- default 400 ms
   },
   view = {
@@ -117,12 +136,12 @@ nvim_tree.setup {
   },
   actions = {
     change_dir = {
-      enable = false,
+      enable = false, -- do not change directory when changing directory in the tree
     },
     open_file = {
-      quit_on_open = false,
+      quit_on_open = false, -- do not close nvim-tree when opening a file
       window_picker = {
-        enable = false,
+        enable = false, -- when false, just open in last window to launch nvim-tree
       },
     },
   },

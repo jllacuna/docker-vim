@@ -42,13 +42,10 @@ lazy.setup {
   -- This is also a nice colorscheme. Just don't like that function names don't pop as much
   -- { "mhartington/oceanic-next" },
 
-  -- Allows plugins to be repeated with "."
-  { "tpope/vim-repeat" },
-
   -- Highlight other instances of the word under cursor
   { "RRethy/vim-illuminate" },
 
-  -- JSON schemas from schemastore.org
+  -- JSON schemas from schemastore.org, for use with jsonls and yamlls
   { "b0o/schemastore.nvim" },
 
   -- Autopairs, integrates with both cmp and treesitter
@@ -78,8 +75,20 @@ lazy.setup {
     lazy = false,
     dependencies = {
       "nvim-tree/nvim-web-devicons",
+      "b0o/nvim-tree-preview.lua",
     },
     config = function () require("user.tree") end,
+  },
+
+  -- Update code when performing file operations in nvim-tree
+  -- e.g. updates imports when renaming a file
+  {
+    "antosha417/nvim-lsp-file-operations",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-tree.lua",
+    },
+    config = function() require("lsp-file-operations").setup() end,
   },
 
   -- Status line
@@ -88,7 +97,7 @@ lazy.setup {
     config = function () require("user.lualine") end,
   },
 
-  -- Automatically surround quotes, parens, braces, etc.
+  -- Add, change, or delete surrounding quotes, parens, braces, etc.
   {
     "kylechui/nvim-surround",
     version = "*",
@@ -103,13 +112,21 @@ lazy.setup {
     config = function () require("user.whichkey") end,
   },
 
+  -- Markdown editing
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+    config = function () require("user.markdown") end,
+  },
+
   -- Markdown preview
   {
     "ellisonleao/glow.nvim",
     cmd = "Glow",
     config = function()
+      ---@diagnostic disable-next-line: missing-fields
       require("glow").setup {
-        border = "rounded"
+        border = "rounded",
       }
     end,
   },
@@ -147,8 +164,24 @@ lazy.setup {
   -- Command line completions
   {
     "hrsh7th/cmp-cmdline",
-    commit = "e1ba818534a357b77494597469c85030c7233c16" -- https://github.com/hrsh7th/cmp-cmdline/issues/71
+    commit = "e1ba818534a357b77494597469c85030c7233c16", -- https://github.com/hrsh7th/cmp-cmdline/issues/71
   },
+
+  -- configures LuaLS for editing neovim config files
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        "lazy.nvim",
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+        { path = "wezterm-types", mods = { "wezterm" } },
+      },
+    },
+  },
+  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+  { "justinsgithub/wezterm-types", lazy = true }, -- optional wezterm typings
 
   -- snippets
   {
@@ -205,7 +238,21 @@ lazy.setup {
   },
 
   -- UI hooks
-  { "stevearc/dressing.nvim" },
+  {
+    "stevearc/dressing.nvim",
+    config = function()
+      require("dressing").setup {
+        input = {
+          -- Position input just above cursor
+          override = function(conf)
+            conf.col = 0
+            conf.row = -3
+            return conf
+          end,
+        },
+      }
+    end,
+  },
 
   -- Rename symbol with previews
   {
@@ -229,8 +276,10 @@ lazy.setup {
     dependencies = {
       -- Complete SGML (XML, HTML, etc.) tags ]]
       "windwp/nvim-ts-autotag",
+      -- Treesitter selections
+      "nvim-treesitter/nvim-treesitter-textobjects",
       -- Changes format of comments based on location within the file. Useful for JSX and svelte
-      'JoosepAlviste/nvim-ts-context-commentstring',
+      "JoosepAlviste/nvim-ts-context-commentstring",
     },
     config = function () require("user.treesitter") end,
   },
@@ -245,9 +294,6 @@ lazy.setup {
     config = function () require("user.gitsigns") end,
   },
 
-  -- Coffeescript syntax highlighting, etc.
-  { "kchmck/vim-coffee-script" },
-
   -- Search and insert Nerd fonts
   {
     '2kabhishek/nerdy.nvim',
@@ -256,5 +302,22 @@ lazy.setup {
       'nvim-telescope/telescope.nvim',
     },
     cmd = 'Nerdy',
+  },
+
+  -- Colorize color variables
+  {
+    "NvChad/nvim-colorizer.lua",
+    config = function () require("user.colorizer") end,
+  },
+
+  -- Peek registers
+  { "gennaro-tedesco/nvim-peekup" },
+}, {
+  rocks = {
+    -- Disable hererocks for now
+    -- If we install a plugin that needs it, we'll need to install luarocks (https://github.com/luarocks/luarocks/wiki/Installation-instructions-for-Unix)
+    -- Run :checkhealth lazy for more info
+    -- See also https://lazy.folke.io/packages
+    hererocks = false,
   },
 }
