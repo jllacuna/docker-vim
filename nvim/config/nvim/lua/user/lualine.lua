@@ -21,8 +21,8 @@ local nvim_tree_extension = {
   sections = {
     lualine_b = {
       function()
-        local status_ok, nvim_tree_api = pcall(require, "nvim-tree.api")
-        if not status_ok then
+        local tree_status_ok, nvim_tree_api = pcall(require, "nvim-tree.api")
+        if not tree_status_ok then
           vim.notify "nvim-tree.api not found"
           return ''
         end

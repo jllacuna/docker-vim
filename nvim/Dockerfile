@@ -11,11 +11,7 @@ ARG GO_DIR=/usr/local/go
 ARG LSP_SERVERS=/usr/local/lib/lsp_servers
 ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
 ARG MASON_DIR=/usr/local/lib/mason
-
-# Install neovim with docs
-RUN apk add --no-cache \
-  neovim \
-  neovim-doc
+ARG NEOVIM_VERSION=0.10.1
 
 # Install nodejs and npm
 RUN apk add --no-cache \
@@ -39,7 +35,9 @@ RUN apk add --no-cache \
 # Install build tools
 RUN apk add --no-cache \
   build-base \
-  curl
+  curl \
+  gzip \
+  bash
 
 # Install telescope dependencies
 RUN apk add --no-cache \
@@ -56,6 +54,13 @@ RUN npm install -g \
 # https://github.com/charmbracelet/glow
 RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing \
   glow
+
+# Install neovim from source
+RUN apk add --no-cache --virtual .deps cmake coreutils unzip gettext-tiny-dev \
+  && curl --create-dirs -Lo /root/.local/share/neovim.tar.gz https://github.com/neovim/neovim/archive/refs/tags/v${NEOVIM_VERSION}.tar.gz \
+  && cd /root/.local/share && tar xvzf neovim.tar.gz && rm neovim.tar.gz && mv neovim-${NEOVIM_VERSION} neovim \
+  && cd /root/.local/share/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && make install \
+  && apk del .deps
 
 # Set GOPATH to our volumed workspace
 # Allows gopls to reference our imported modules
@@ -96,13 +101,13 @@ RUN nvim --headless "+Lazy! sync" +qa
 # This format makes it easy to comment out a server while still only generating one Docker layer
 # WARNING: Can run up to 10 +/-c commands
 RUN nvim --headless \
-  +"MasonInstall json-lsp css-lsp html-lsp" \
-  +"MasonInstall vtsls" \
-  +"MasonInstall yaml-language-server" \
-  +"MasonInstall dockerfile-language-server" \
-  +"MasonInstall svelte-language-server" \
+  +"MasonInstall bash-language-server" \
+  +"MasonInstall css-lsp html-lsp json-lsp" \
+  +"MasonInstall dockerfile-language-server docker-compose-language-service" \
   +"MasonInstall gopls" \
-  +"MasonInstall pyright" \
-  +"MasonInstall solargraph" \
-  +"MasonInstall rnix-lsp" \
+  +"MasonInstall lua-language-server" \
+  +"MasonInstall marksman" \
+  +"MasonInstall svelte-language-server" \
+  +"MasonInstall vtsls" \
+  +"MasonInstall taplo yaml-language-server" \
   +qa

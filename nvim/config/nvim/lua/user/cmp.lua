@@ -10,21 +10,19 @@ if not snip_status_ok then
   return
 end
 
-require("luasnip/loaders/from_vscode").lazy_load()
-
 local check_backspace = function()
   local col = vim.fn.col "." - 1
   return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
 end
 
---   פּ ﯟ   some other good icons
+-- icon to display next to the completion type
 local kind_icons = {
-  Text = "",
+  Text = "",
   Method = "m",
-  Function = "",
+  Function = "󰊕",
   Constructor = "",
   Field = "",
-  Variable = "",
+  Variable = "󰫧",
   Class = "",
   Interface = "",
   Module = "",
@@ -37,15 +35,37 @@ local kind_icons = {
   Color = "",
   File = "",
   Reference = "",
-  Folder = "",
+  Folder = "",
   EnumMember = "",
-  Constant = "",
+  Constant = "",
   Struct = "",
   Event = "",
-  Operator = "",
-  TypeParameter = "",
+  Operator = "",
+  TypeParameter = "󰊄",
 }
--- find more here: https://www.nerdfonts.com/cheat-sheet
+
+-- tab completion for search based on current buffer
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name ="buffer" },
+  },
+})
+
+-- tab completion for commands
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    {
+      name = 'cmdline',
+      option = {
+        ignore_cmds = { 'Man', '!' }
+      }
+    }
+  })
+})
 
 cmp.setup {
   snippet = {
@@ -110,6 +130,7 @@ cmp.setup {
       })[entry.source.name]
       return vim_item
     end,
+    expandable_indicator = false,
   },
   sources = {
     { name = "nvim_lsp" },
@@ -117,7 +138,8 @@ cmp.setup {
     { name = "luasnip" },
     { name = "buffer" },
     { name = "path" },
-    { name = 'nvim_lsp_signature_help' },
+    { name = "nvim_lsp_signature_help" },
+    { name = "lazydev", group_index = 0 },
   },
   confirm_opts = {
     behavior = cmp.ConfirmBehavior.Replace,

@@ -9,5 +9,5 @@ navic.setup {
     auto_attach = true,
   },
   highlight = true,
-  separator = "  ",
+  separator = " ",
 }

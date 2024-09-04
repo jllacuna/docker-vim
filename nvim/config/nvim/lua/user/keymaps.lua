@@ -104,8 +104,11 @@ end, { desc = 'Rename symbol', expr = true })
 keymap("n", "<leader>s", "<cmd>TSHighlightCapturesUnderCursor<cr>", merge({ desc = 'Show syntax highlight groups' }, opts))
 keymap("n", "<leader>p", "<cmd>TSPlaygroundToggle<cr>", merge({ desc = 'Toggle treesitter playground' }, opts))
 
+-- render-markdown.nvim --
+keymap("n", "<leader>m", "<cmd>RenderMarkdown toggle<cr>", merge({ desc = 'Toggle Markdown Render' }, opts))
+
 -- Glow (Markdown Preview) --
-keymap("n", "<leader>m", "<cmd>Glow<cr>", merge({ desc = 'Show Markdown Preview' }, opts))
+keymap("n", "<leader>mp", "<cmd>Glow<cr>", merge({ desc = 'Show Markdown Preview' }, opts))
 
 -- Todo Comments --
 keymap("n", "<leader>t", "<cmd>TodoQuickFix<cr>", merge({ desc = 'Show TODOs in quickfix' }, opts))
@@ -116,6 +119,9 @@ keymap("n", "<leader>bd", "<cmd>Bdelete<cr>", merge({ desc = 'Delete buffer keep
 
 -- outline.nvim --
 keymap("n", "<leader>o", "<cmd>Outline<cr>", merge({ desc = 'Toggle symbol outline' }, opts))
+
+-- colorizer --
+keymap("n", "<leader>co", "<cmd>ColorizerToggle<cr>", merge({ desc = 'Toggle colorizing color values' }, opts))
 
 -- Toggle line numbers
 keymap("n", "<leader>l", ":set nonumber!<CR>", merge({ desc = 'Toggle line numbers' }, opts))

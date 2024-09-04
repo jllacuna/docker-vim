@@ -68,21 +68,6 @@ local function lsp_highlight_document(client)
   illuminate.on_attach(client)
 end
 
--- Fix issue with file watching in neovim 0.9 on MacOS
--- Supposedly fixed in neovim 0.10 nightly build: https://github.com/sveltejs/language-tools/issues/2008#issuecomment-1601834438
--- Original fix: https://github.com/sveltejs/language-tools/issues/2008#issuecomment-1539788464
--- Variation fix: https://github.com/neovim/nvim-lspconfig/issues/725#issuecomment-1539822348
-local function lsp_svelte(client)
-  if client.name == "svelte" then
-    vim.api.nvim_create_autocmd("BufWritePost", {
-      pattern = { "*.js", "*.ts" },
-      callback = function(ctx)
-        client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.file })
-      end,
-    })
-  end
-end
-
 local function lsp_keymaps(bufnr)
   local opts = { noremap = true, silent = true }
   vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", merge({ desc = 'Jump to declaration' }, opts))
@@ -102,17 +87,25 @@ end
 M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
   lsp_highlight_document(client)
-  lsp_svelte(client)
 end
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local lsp_file_status_ok, lsp_file_operations = pcall(require, "lsp-file-operations")
+if not lsp_file_status_ok then
+  vim.notify "lsp-file-operations not found"
+  return
+end
 
-local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if not status_ok then
+local cmp_lsp_status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+if not cmp_lsp_status_ok then
   vim.notify "cmp_nvim_lsp not found"
   return
 end
 
-M.capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+M.capabilities = vim.tbl_deep_extend(
+  "force",
+  vim.lsp.protocol.make_client_capabilities(),
+  lsp_file_operations.default_capabilities(),
+  cmp_nvim_lsp.default_capabilities()
+)
 
 return M
