@@ -3,4 +3,4 @@
 # Compiles treesitter parsers from source
 # Good for updating to the latest treesitter parsers
 # WARNING: Compiling treesitter parsers takes a while (~10 mins with current list of parsers)
-docker build -t jllacuna/nvim --target not_cached --progress plain .
+docker build --platform linux/amd64 -t jllacuna/nvim --target not_cached --progress plain .
