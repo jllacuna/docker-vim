@@ -1,10 +1,9 @@
 #
 # Stage: base
 #
-FROM --platform=linux/amd64 jllacuna/nvim AS cache
-FROM --platform=linux/amd64 golang:alpine AS golang
-# glibc needed for tree-sitter-cli
-FROM --platform=linux/amd64 frolvlad/alpine-glibc:alpine-3.20 AS base
+FROM jllacuna/nvim AS cache
+FROM golang:alpine AS golang
+FROM alpine:3.20 AS base
 
 ARG NVIM_CONFIG_PATH=/root/.config
 ARG GO_DIR=/usr/local/go
@@ -46,8 +45,9 @@ RUN apk add --no-cache \
   git
 
 # Install tree-sitter
-RUN npm install -g \
-  tree-sitter-cli
+RUN apk add --no-cache --virtual .deps gcompat \
+  && npm install -g tree-sitter-cli \
+  && apk del .deps
 
 # Install glow from alpine/edge/testing
 # CLI Markdown reader
