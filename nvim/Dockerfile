@@ -55,6 +55,17 @@ RUN apk add --no-cache --virtual .deps gcompat \
 RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing \
   glow
 
+# Install lua-language-server
+# Mason install causes errors
+RUN apk add --no-cache --virtual .deps bash ninja linux-headers \
+  && mkdir -p $LSP_SERVERS \
+  && cd $LSP_SERVERS \
+  && git clone https://github.com/LuaLS/lua-language-server \
+  && cd lua-language-server \
+  && ./make.sh \
+  && ln -s "${LSP_SERVERS}/lua-language-server/bin/lua-language-server" /usr/local/bin \
+  && apk del .deps
+
 # Install neovim from source
 RUN apk add --no-cache --virtual .deps cmake coreutils unzip gettext-tiny-dev \
   && curl --create-dirs -Lo /root/.local/share/neovim.tar.gz https://github.com/neovim/neovim/archive/refs/tags/v${NEOVIM_VERSION}.tar.gz \
@@ -105,7 +116,6 @@ RUN nvim --headless \
   +"MasonInstall css-lsp html-lsp json-lsp" \
   +"MasonInstall dockerfile-language-server docker-compose-language-service" \
   +"MasonInstall gopls" \
-  +"MasonInstall lua-language-server" \
   +"MasonInstall marksman" \
   +"MasonInstall svelte-language-server" \
   +"MasonInstall vtsls" \

@@ -39,12 +39,14 @@ configs.setup {
     -- "jsdoc",
     "json",
     -- "kotlin",
+    "ledger",
     "lua",
     -- "make",
     "markdown",
     "markdown_inline",
     -- "ninja",
     -- "nix",
+    "nu",
     -- "perl",
     -- "php",
     -- "proto",
@@ -132,6 +134,9 @@ configs.setup {
         ["ic"] = { query = "@class.inner", desc = "Select class inner" },
         -- You can also use captures from other query groups like `locals.scm`
         ["as"] = { query = "@scope", query_group = "locals", desc = "Select scope" },
+        -- nushell
+        ["aP"] = "@pipeline.outer",
+        ["iP"] = "@pipeline.inner",
       },
       -- You can choose the select mode (default is charwise 'v')
       --

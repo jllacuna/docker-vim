@@ -68,6 +68,17 @@ lazy.setup({
     config = function() require("mini.align").setup() end,
   },
 
+  -- Split/join arrays, hashes/objects, statements
+  {
+    'Wansmer/treesj',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('treesj').setup({
+        use_default_keymaps = false,
+      })
+    end,
+  },
+
   -- File explorer
   {
     "nvim-tree/nvim-tree.lua",
@@ -200,6 +211,13 @@ lazy.setup({
     config = function () require("user.lsp") end,
   },
 
+  -- Jump to next/previous reference with LSP
+  {
+    "mawkler/refjump.nvim",
+    event = "LspAttach",
+    opts = {},
+  },
+
   -- Display code context in status line
   {
     "SmiteshP/nvim-navic",
@@ -273,6 +291,8 @@ lazy.setup({
       "nvim-treesitter/nvim-treesitter-textobjects",
       -- Changes format of comments based on location within the file. Useful for JSX and svelte
       "JoosepAlviste/nvim-ts-context-commentstring",
+      -- nushell
+      "nushell/tree-sitter-nu",
     },
     config = function () require("user.treesitter") end,
   },
@@ -305,6 +325,9 @@ lazy.setup({
 
   -- Peek registers
   { "gennaro-tedesco/nvim-peekup" },
+
+  -- ledger CLI
+  { "ledger/vim-ledger", },
 }, {
   rocks = {
     -- Disable hererocks for now

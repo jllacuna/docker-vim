@@ -25,4 +25,4 @@ else
   fi
 fi
 
-docker run -it --rm --platform linux/amd64 --cpus="2" -v "$root":/data -v "$HOME/workspace":/workspace jllacuna/nvim $files
+docker run -it --rm --cpus="2" -v "$root":/data -v "$HOME/workspace":/workspace jllacuna/nvim $files

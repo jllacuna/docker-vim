@@ -12,7 +12,7 @@ local servers = {
   "gopls",
   "html",
   "jsonls",
-  "lua_ls",
+  -- "lua_ls",
   "marksman",
   -- "pyright",
   -- "rnix",
@@ -24,6 +24,7 @@ local servers = {
 }
 
 mason_lspconfig.setup {
+  automatic_installation = false,
   ensure_installed = servers,
 }
 
@@ -35,7 +36,8 @@ end
 
 require("lspconfig.configs").vtsls = require("vtsls").lspconfig
 
-for _, server in pairs(servers) do
+-- Mason install of lua-language-server causes errors on Apple Silicon (unsupported platform)
+for _, server in pairs(vim.tbl_deep_extend("force", servers, { "lua_ls" })) do
   local opts = {
     on_attach = require("user.lsp.handlers").on_attach,
     capabilities = require("user.lsp.handlers").capabilities,
