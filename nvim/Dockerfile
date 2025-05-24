@@ -2,8 +2,8 @@
 # Stage: base
 #
 FROM jllacuna/nvim AS cache
-FROM golang:alpine AS golang
-FROM alpine:3.20 AS base
+FROM golang:1.24.3-alpine3.21 AS golang
+FROM node:22.16.0-alpine3.21 AS base
 
 ARG NVIM_CONFIG_PATH=/root/.config
 ARG GO_DIR=/usr/local/go
@@ -11,11 +11,6 @@ ARG LSP_SERVERS=/usr/local/lib/lsp_servers
 ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
 ARG MASON_DIR=/usr/local/lib/mason
 ARG NEOVIM_VERSION=0.11.1
-
-# Install nodejs and npm
-RUN apk add --no-cache \
-  nodejs \
-  npm
 
 # Install ruby
 RUN apk add --no-cache \
@@ -26,17 +21,18 @@ RUN apk add --no-cache \
 COPY --from=golang $GO_DIR $GO_DIR
 ENV PATH=$PATH:$GO_DIR/bin
 
-# Install rust and cargo
-RUN apk add --no-cache \
-  rust \
-  cargo
-
 # Install build tools
 RUN apk add --no-cache \
   build-base \
   curl \
+  wget \
+  unzip \
   gzip \
   bash
+
+# Install rust and cargo
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH=$PATH:/root/.cargo/bin
 
 # Install telescope dependencies
 RUN apk add --no-cache \
@@ -46,7 +42,7 @@ RUN apk add --no-cache \
 
 # Install tree-sitter
 RUN apk add --no-cache --virtual .deps gcompat \
-  && npm install -g tree-sitter-cli \
+  && cargo install tree-sitter-cli --locked --color=never \
   && apk del .deps
 
 # Install glow from alpine/edge/testing
