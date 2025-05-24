@@ -10,7 +10,7 @@ ARG GO_DIR=/usr/local/go
 ARG LSP_SERVERS=/usr/local/lib/lsp_servers
 ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
 ARG MASON_DIR=/usr/local/lib/mason
-ARG NEOVIM_VERSION=0.10.1
+ARG NEOVIM_VERSION=0.11.1
 
 # Install nodejs and npm
 RUN apk add --no-cache \
