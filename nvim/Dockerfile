@@ -2,15 +2,15 @@
 # Stage: base
 #
 FROM jllacuna/nvim AS cache
-FROM golang:1.25.0-alpine3.22 AS golang
-FROM node:22.18.0-alpine3.22 AS base
+FROM golang:1.25.3-alpine3.22 AS golang
+FROM node:24.11.0-alpine3.22 AS base
 
 ARG NVIM_CONFIG_PATH=/root/.config
 ARG GO_DIR=/usr/local/go
 ARG LSP_SERVERS=/usr/local/lib/lsp_servers
 ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
 ARG MASON_DIR=/usr/local/lib/mason
-ARG NEOVIM_VERSION=0.11.4
+ARG NEOVIM_VERSION=0.11.5
 
 # Install ruby
 RUN apk add --no-cache \
