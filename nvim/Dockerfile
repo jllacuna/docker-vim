@@ -2,15 +2,15 @@
 # Stage: base
 #
 FROM jllacuna/nvim AS cache
-FROM golang:1.25.3-alpine3.22 AS golang
-FROM node:24.11.0-alpine3.22 AS base
+FROM golang:1.25.7-alpine3.23 AS golang
+FROM node:24.13.0-alpine3.23 AS base
 
 ARG NVIM_CONFIG_PATH=/root/.config
 ARG GO_DIR=/usr/local/go
 ARG LSP_SERVERS=/usr/local/lib/lsp_servers
 ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
 ARG MASON_DIR=/usr/local/lib/mason
-ARG NEOVIM_VERSION=0.11.5
+ARG NEOVIM_VERSION=0.11.6
 
 # Install ruby
 RUN apk add --no-cache \
@@ -41,8 +41,8 @@ RUN apk add --no-cache \
   git
 
 # Install tree-sitter
-RUN apk add --no-cache --virtual .deps gcompat \
-  && cargo install tree-sitter-cli --locked --color=never \
+RUN apk add --no-cache --virtual .deps clang-dev \
+  && RUSTFLAGS="-C target-feature=-crt-static" cargo install tree-sitter-cli --locked --color=never \
   && apk del .deps
 
 # Install glow from alpine/edge/testing
@@ -58,6 +58,7 @@ RUN apk add --no-cache --virtual .deps bash ninja linux-headers \
   && cd $LSP_SERVERS \
   && git clone https://github.com/LuaLS/lua-language-server \
   && cd lua-language-server \
+  && chmod +x ./make.sh \
   && ./make.sh \
   && ln -s "${LSP_SERVERS}/lua-language-server/bin/lua-language-server" /usr/local/bin \
   && apk del .deps

@@ -28,12 +28,6 @@ mason_lspconfig.setup {
   ensure_installed = servers,
 }
 
-local lsp_status_ok, lspconfig = pcall(require, "lspconfig")
-if not lsp_status_ok then
-  vim.notify "lspconfig not found"
-  return
-end
-
 require("lspconfig.configs").vtsls = require("vtsls").lspconfig
 
 -- Mason install of lua-language-server causes errors on Apple Silicon (unsupported platform)
@@ -47,5 +41,6 @@ for _, server in pairs(vim.tbl_deep_extend("force", servers, { "lua_ls" })) do
     opts = vim.tbl_deep_extend("force", server_custom_opts, opts)
   end
 
-  lspconfig[server].setup(opts)
+  vim.lsp.config(server, opts)
+  vim.lsp.enable(server)
 end

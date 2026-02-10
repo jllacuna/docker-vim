@@ -288,6 +288,7 @@ lazy.setup({
   -- Treesitter: Syntax parsing for better code highlights, etc.
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",
     dependencies = {
       -- Complete SGML (XML, HTML, etc.) tags ]]
       "windwp/nvim-ts-autotag",
@@ -298,9 +299,6 @@ lazy.setup({
     },
     config = function() require("user.treesitter") end,
   },
-
-  -- Allows you to inspect treesitter syntax trees
-  { "nvim-treesitter/playground" },
 
   -- Git
   -- Displays git change indicators in the sign column and allows you to perform git operations inline

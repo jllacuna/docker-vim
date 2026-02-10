@@ -85,6 +85,11 @@ keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", merge({ desc = 'Find
 keymap("n", "<leader>fc", "<cmd>Telescope git_status<cr>", merge({ desc = 'Find changes (git)' }, opts))
 keymap("n", "<leader>fn", "<cmd>Telescope nerdy<cr>", merge({ desc = 'Search and insert Nerd fonts' }, opts))
 keymap("n", "<leader>fo", "<cmd>Telescope notify<cr>", merge({ desc = 'Search notification history' }, opts))
+
+vim.keymap.set("n", "<leader>fr", function()
+  require('telescope.builtin').lsp_references()
+end, { desc = "Find references under cursor" })
+
 vim.keymap.set("n", "<leader>fw", function()
   local word = vim.fn.expand("<cword>");
   local status_ok, tb = pcall(require, "telescope.builtin")
@@ -104,9 +109,9 @@ vim.keymap.set("n", "<leader>rn", function()
   return ":IncRename " .. vim.fn.expand("<cword>")
 end, { desc = 'Rename symbol', expr = true })
 
--- Treesitter Playground --
-keymap("n", "<leader>s", "<cmd>TSHighlightCapturesUnderCursor<cr>", merge({ desc = 'Show syntax highlight groups' }, opts))
-keymap("n", "<leader>p", "<cmd>TSPlaygroundToggle<cr>", merge({ desc = 'Toggle treesitter playground' }, opts))
+-- Treesitter Inspection --
+keymap("n", "<leader>s", "<cmd>Inspect<cr>", merge({ desc = 'Show syntax highlight groups and semantic tokens' }, opts))
+keymap("n", "<leader>p", "<cmd>InspectTree<cr>", merge({ desc = 'Show Abstract Syntax Tree (AST) in split' }, opts))
 
 -- treesj --
 keymap("n", "<leader>J", "<cmd>TSJToggle<cr>", merge({ desc = 'Toggle join/split arrays, objects, statements' }, opts))
