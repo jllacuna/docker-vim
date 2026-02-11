@@ -1,3 +1,38 @@
+# Stage: treesitter
+FROM alpine:3.23 AS treesitter
+
+RUN apk add --no-cache curl clang-dev
+
+# Install rust and cargo
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH=$PATH:/root/.cargo/bin
+
+# Install tree-sitter
+RUN RUSTFLAGS="-C target-feature=-crt-static" cargo install tree-sitter-cli --locked --color=never
+
+# Stage: lua-language-server
+FROM alpine:3.23 AS lua-language-server
+
+# Install lua-language-server from source
+# Mason install causes errors
+RUN apk add --no-cache bash git build-base ninja linux-headers
+RUN git clone https://github.com/LuaLS/lua-language-server \
+  && cd lua-language-server \
+  && chmod +x ./make.sh \
+  && ./make.sh
+
+# Stage: neovim
+FROM alpine:3.23 AS neovim
+
+ARG NEOVIM_VERSION=0.11.6
+
+# Install neovim from source
+RUN apk add --no-cache curl build-base cmake coreutils unzip gettext-tiny-dev 
+RUN curl -Lo neovim.tar.gz https://github.com/neovim/neovim/archive/refs/tags/v${NEOVIM_VERSION}.tar.gz \
+  && tar xvzf neovim.tar.gz && rm neovim.tar.gz && cd neovim-${NEOVIM_VERSION} \
+  && make CMAKE_BUILD_TYPE=RelWithDebInfo \
+  && make DESTDIR=/tmp/nvim_dist install
+
 #
 # Stage: base
 #
@@ -7,15 +42,13 @@ FROM node:24.13.0-alpine3.23 AS base
 
 ARG NVIM_CONFIG_PATH=/root/.config
 ARG GO_DIR=/usr/local/go
-ARG LSP_SERVERS=/usr/local/lib/lsp_servers
 ARG PARSER_DIR=/usr/local/lib/treesitter_parsers
 ARG MASON_DIR=/usr/local/lib/mason
-ARG NEOVIM_VERSION=0.11.6
 
 # Install ruby
-RUN apk add --no-cache \
-  ruby \
-  ruby-dev
+# RUN apk add --no-cache \
+#   ruby \
+#   ruby-dev
 
 # Install go
 COPY --from=golang $GO_DIR $GO_DIR
@@ -30,20 +63,11 @@ RUN apk add --no-cache \
   gzip \
   bash
 
-# Install rust and cargo
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH=$PATH:/root/.cargo/bin
-
 # Install telescope dependencies
 RUN apk add --no-cache \
   ripgrep \
   fd \
   git
-
-# Install tree-sitter
-RUN apk add --no-cache --virtual .deps clang-dev \
-  && RUSTFLAGS="-C target-feature=-crt-static" cargo install tree-sitter-cli --locked --color=never \
-  && apk del .deps
 
 # Install glow from alpine/edge/testing
 # CLI Markdown reader
@@ -51,24 +75,9 @@ RUN apk add --no-cache --virtual .deps clang-dev \
 RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing \
   glow
 
-# Install lua-language-server
-# Mason install causes errors
-RUN apk add --no-cache --virtual .deps bash ninja linux-headers \
-  && mkdir -p $LSP_SERVERS \
-  && cd $LSP_SERVERS \
-  && git clone https://github.com/LuaLS/lua-language-server \
-  && cd lua-language-server \
-  && chmod +x ./make.sh \
-  && ./make.sh \
-  && ln -s "${LSP_SERVERS}/lua-language-server/bin/lua-language-server" /usr/local/bin \
-  && apk del .deps
-
-# Install neovim from source
-RUN apk add --no-cache --virtual .deps cmake coreutils unzip gettext-tiny-dev \
-  && curl --create-dirs -Lo /root/.local/share/neovim.tar.gz https://github.com/neovim/neovim/archive/refs/tags/v${NEOVIM_VERSION}.tar.gz \
-  && cd /root/.local/share && tar xvzf neovim.tar.gz && rm neovim.tar.gz && mv neovim-${NEOVIM_VERSION} neovim \
-  && cd /root/.local/share/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && make install \
-  && apk del .deps
+COPY --from=treesitter /root/.cargo/bin/tree-sitter /usr/local/bin
+COPY --from=lua-language-server "lua-language-server/bin/lua-language-server" /usr/local/bin
+COPY --from=neovim /tmp/nvim_dist/usr/local /usr/local
 
 # Set GOPATH to our volumed workspace
 # Allows gopls to reference our imported modules
