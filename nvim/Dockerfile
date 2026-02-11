@@ -79,10 +79,6 @@ COPY --from=treesitter /root/.cargo/bin/tree-sitter /usr/local/bin
 COPY --from=lua-language-server "lua-language-server/bin/lua-language-server" /usr/local/bin
 COPY --from=neovim /tmp/nvim_dist/usr/local /usr/local
 
-# Set GOPATH to our volumed workspace
-# Allows gopls to reference our imported modules
-ENV GOPATH=/workspace/go
-
 WORKDIR /data
 
 ENTRYPOINT [ "nvim" ]
@@ -101,6 +97,10 @@ COPY config $NVIM_CONFIG_PATH
 
 # Install plugins with lazy.nvim
 RUN nvim --headless "+Lazy! sync" +qa
+
+# Set GOPATH to our volumed workspace
+# Allows gopls to reference our imported modules
+ENV GOPATH=/workspace/go
 
 #
 # Stage: not_cached
@@ -126,4 +126,13 @@ RUN nvim --headless \
   +"MasonInstall svelte-language-server" \
   +"MasonInstall vtsls" \
   +"MasonInstall taplo yaml-language-server" \
-  +qa
+  +qa \
+  # Clean up go cache and go modules downloaded for gopls
+  && go clean -cache -modcache \
+  # Clean up npm cache
+  && npm cache clean --force
+
+
+# Set GOPATH to our volumed workspace
+# Allows gopls to reference our imported modules
+ENV GOPATH=/workspace/go
